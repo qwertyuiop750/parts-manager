@@ -1,0 +1,275 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Save, ArrowLeft, MapPin, Package, Boxes } from "lucide-react";
+import type { Part, PartFormData } from "@/types";
+import { usePartsStore } from "@/store/usePartsStore";
+import { locationPath } from "@/utils/format";
+import Field, { inputCls } from "@/components/form/Field";
+import ImageUpload from "@/components/ImageUpload";
+
+interface PartFormProps {
+  mode: "add" | "edit";
+  initial?: Part;
+}
+
+const UNITS = ["个", "件", "套", "组", "对", "米", "kg"];
+
+export default function PartForm({ mode, initial }: PartFormProps) {
+  const navigate = useNavigate();
+  const addPart = usePartsStore((s) => s.addPart);
+  const updatePart = usePartsStore((s) => s.updatePart);
+
+  const [form, setForm] = useState<PartFormData>(() => ({
+    name: initial?.name ?? "",
+    spec: initial?.spec ?? "",
+    category: initial?.category ?? "",
+    unit: initial?.unit ?? "个",
+    zone: initial?.zone ?? "",
+    shelf: initial?.shelf ?? "",
+    layer: initial?.layer ?? "",
+    bin: initial?.bin ?? "",
+    quantity: initial?.quantity ?? 0,
+    safetyStock: initial?.safetyStock ?? 0,
+    remark: initial?.remark ?? "",
+    image: initial?.image,
+  }));
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const set = <K extends keyof PartFormData>(key: K, value: PartFormData[K]) => {
+    setForm((f) => ({ ...f, [key]: value }));
+    if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
+  };
+
+  const validate = (): boolean => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "请输入中文名";
+    if (!form.spec.trim()) errs.spec = "请输入规格";
+    if (!form.zone.trim()) errs.zone = "请输入库区";
+    if (!form.shelf.trim()) errs.shelf = "请输入货架";
+    if (!form.layer.trim()) errs.layer = "请输入层";
+    if (!form.bin.trim()) errs.bin = "请输入位";
+    if (form.quantity < 0) errs.quantity = "数量不能为负";
+    if (form.safetyStock < 0) errs.safetyStock = "不能为负";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    const data: PartFormData = {
+      ...form,
+      name: form.name.trim(),
+      spec: form.spec.trim(),
+      category: form.category.trim(),
+      zone: form.zone.trim(),
+      shelf: form.shelf.trim(),
+      layer: form.layer.trim(),
+      bin: form.bin.trim(),
+      remark: form.remark.trim(),
+    };
+    if (mode === "edit" && initial) {
+      updatePart(initial.id, data);
+      navigate(`/detail/${initial.id}`);
+    } else {
+      const part = addPart(data);
+      navigate(`/detail/${part.id}`);
+    }
+  };
+
+  const locPath = locationPath(form);
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl animate-fade-up">
+      {/* 顶部操作栏 */}
+      <div className="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-1.5 text-sm text-steel-600 hover:text-steel-900"
+        >
+          <ArrowLeft size={18} />
+          返回
+        </button>
+        <h2 className="text-lg font-bold text-steel-800">
+          {mode === "edit" ? "编辑配件" : "新增配件"}
+        </h2>
+        <button
+          type="submit"
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+        >
+          <Save size={16} strokeWidth={2.5} />
+          保存
+        </button>
+      </div>
+
+      {/* 基本信息 */}
+      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
+          <Package size={18} className="text-hazard-600" />
+          <h3 className="font-bold text-steel-800">基本信息</h3>
+        </div>
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="中文名" required error={errors.name}>
+            <input
+              className={inputCls}
+              value={form.name}
+              onChange={(e) => set("name", e.target.value)}
+              placeholder="如：六角螺栓"
+              autoFocus
+            />
+          </Field>
+          <Field label="规格" required error={errors.spec}>
+            <input
+              className={`${inputCls} font-mono-num`}
+              value={form.spec}
+              onChange={(e) => set("spec", e.target.value)}
+              placeholder="如：M8×30"
+            />
+          </Field>
+          <Field label="分类">
+            <input
+              className={inputCls}
+              value={form.category}
+              onChange={(e) => set("category", e.target.value)}
+              placeholder="如：紧固件、电气、气动"
+            />
+          </Field>
+          <Field label="单位">
+            <select
+              className={inputCls}
+              value={form.unit}
+              onChange={(e) => set("unit", e.target.value)}
+            >
+              {UNITS.map((u) => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="备注" className="sm:col-span-2">
+            <textarea
+              className={`${inputCls} min-h-[72px] resize-y`}
+              value={form.remark}
+              onChange={(e) => set("remark", e.target.value)}
+              placeholder="补充说明…"
+            />
+          </Field>
+          <div className="sm:col-span-2">
+            <label className="text-sm font-medium text-steel-700 mb-1.5 block">
+              配件图片
+            </label>
+            <ImageUpload
+              value={form.image}
+              onChange={(url) => set("image", url)}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 位置信息 */}
+      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
+          <MapPin size={18} className="text-hazard-600" />
+          <h3 className="font-bold text-steel-800">位置信息</h3>
+        </div>
+        <div className="p-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <Field label="库区" required error={errors.zone}>
+            <input
+              className={`${inputCls} font-mono-num`}
+              value={form.zone}
+              onChange={(e) => set("zone", e.target.value)}
+              placeholder="A区"
+            />
+          </Field>
+          <Field label="货架" required error={errors.shelf}>
+            <input
+              className={`${inputCls} font-mono-num`}
+              value={form.shelf}
+              onChange={(e) => set("shelf", e.target.value)}
+              placeholder="货架03"
+            />
+          </Field>
+          <Field label="层" required error={errors.layer}>
+            <input
+              className={`${inputCls} font-mono-num`}
+              value={form.layer}
+              onChange={(e) => set("layer", e.target.value)}
+              placeholder="第2层"
+            />
+          </Field>
+          <Field label="位" required error={errors.bin}>
+            <input
+              className={`${inputCls} font-mono-num`}
+              value={form.bin}
+              onChange={(e) => set("bin", e.target.value)}
+              placeholder="A位"
+            />
+          </Field>
+          {locPath && (
+            <div className="col-span-2 sm:col-span-4 mt-1">
+              <p className="text-xs text-steel-500 mb-1">位置预览：</p>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-hazard-100 text-hazard-700 border border-hazard-300 rounded-sm font-mono-num text-sm">
+                <MapPin size={14} strokeWidth={2.5} />
+                {locPath}
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 库存设置 */}
+      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
+          <Boxes size={18} className="text-hazard-600" />
+          <h3 className="font-bold text-steel-800">库存设置</h3>
+        </div>
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field
+            label={mode === "edit" ? "当前库存" : "初始数量"}
+            error={errors.quantity}
+            hint="低于或等于安全库存时将预警"
+          >
+            <input
+              type="number"
+              min={0}
+              className={`${inputCls} font-mono-num`}
+              value={form.quantity}
+              onChange={(e) => set("quantity", Number(e.target.value))}
+            />
+          </Field>
+          <Field label="安全库存阈值" error={errors.safetyStock}>
+            <input
+              type="number"
+              min={0}
+              className={`${inputCls} font-mono-num`}
+              value={form.safetyStock}
+              onChange={(e) => set("safetyStock", Number(e.target.value))}
+              placeholder="低于此值预警"
+            />
+          </Field>
+        </div>
+      </section>
+
+      {/* 底部保存按钮 */}
+      <div className="flex justify-end gap-2 pb-4">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="px-5 py-2.5 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors"
+        >
+          取消
+        </button>
+        <button
+          type="submit"
+          className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+        >
+          <Save size={16} strokeWidth={2.5} />
+          保存配件
+        </button>
+      </div>
+    </form>
+  );
+}
