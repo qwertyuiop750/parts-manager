@@ -47,9 +47,9 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
   return (
     <div className="min-h-screen flex flex-col bg-steel-100">
       {/* 顶部导航 */}
-      <header className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg">
+      <header className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg" style={{ paddingTop: 'var(--safe-top)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center gap-6">
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="flex items-center justify-center w-10 h-10 bg-hazard-400 text-steel-900 rounded-sm group-hover:bg-hazard-300 transition-colors">
@@ -180,7 +180,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
       </main>
 
       {/* 底栏 */}
-      <footer className="bg-steel-800 text-steel-400 text-xs py-3">
+      <footer className="bg-steel-800 text-steel-400 text-xs py-3" style={{ paddingBottom: 'var(--safe-bottom)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <span>数据本地存储 · 支持云端同步</span>
           <span className="font-mono-num">v1.1</span>
