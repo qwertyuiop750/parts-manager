@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="16" fill="#1e293b"/>
+  <g transform="translate(48,46)" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 60 L24 24 L48 60 L24 48 Z"/>
+    <path d="M48 60 L72 24 L96 60 L72 48 Z"/>
+    <rect x="2" y="2" width="92" height="56" rx="6" stroke-width="2.5"/>
+    <path d="M14 70 L14 90 M82 70 L82 90" stroke-width="3"/>
+    <path d="M6 70 L90 70" stroke-width="3"/>
+  </g>
+  <text x="96" y="170" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="sans-serif" font-weight="700">配件仓位</text>
+</svg>
