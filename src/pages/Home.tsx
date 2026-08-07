@@ -3,7 +3,16 @@ import { Search, Package, AlertTriangle, Map, PackageCheck, Filter, X } from "lu
 import { usePartsStore } from "@/store/usePartsStore";
 import { isLowStock, isToday } from "@/utils/format";
 import { exportData, parseImportFile } from "@/utils/io";
+import {
+  isSyncConfigured,
+  getSyncConfig,
+  pullRemoteData,
+  pushRemoteData,
+  buildExportData,
+  mergeRemoteToLocal,
+} from "@/utils/sync";
 import Layout from "@/components/Layout";
+import type { SyncStatus } from "@/components/Layout";
 import StatCard from "@/components/StatCard";
 import PartsTable from "@/components/PartsTable";
 import type { SortKey } from "@/types";
@@ -28,6 +37,10 @@ export default function Home() {
   const [sortKey, setSortKey] = useState<SortKey>("updatedAt");
   const fileRef = useRef<HTMLInputElement>(null);
   const [importMode, setImportMode] = useState<"replace" | "merge">("merge");
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
+  const [lastSyncTime, setLastSyncTime] = useState(() => {
+    try { return localStorage.getItem("parts_manager_last_sync") || ""; } catch { return ""; }
+  });
 
   // 统计
   const stats = useMemo(() => {
@@ -106,8 +119,60 @@ export default function Home() {
 
   const hasFilter = zoneFilter || categoryFilter;
 
+  // 云端同步 - 推送
+  const handleSyncPush = async () => {
+    const cfg = getSyncConfig();
+    if (!cfg) return;
+    setSyncStatus("syncing");
+    try {
+      const { sha } = await pullRemoteData(cfg);
+      const data = buildExportData(parts, outbounds, assemblies, pickTasks);
+      await pushRemoteData(cfg, data, sha || undefined);
+      const now = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+      setLastSyncTime(now);
+      localStorage.setItem("parts_manager_last_sync", now);
+      setSyncStatus("success");
+      setTimeout(() => setSyncStatus("idle"), 2000);
+    } catch (err) {
+      alert("推送失败：" + (err as Error).message);
+      setSyncStatus("error");
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    }
+  };
+
+  // 云端同步 - 拉取
+  const handleSyncPull = async () => {
+    const cfg = getSyncConfig();
+    if (!cfg) return;
+    setSyncStatus("syncing");
+    try {
+      const { data } = await pullRemoteData(cfg);
+      if (!data) {
+        alert("云端暂无数据，请先推送");
+        setSyncStatus("idle");
+        return;
+      }
+      const merged = mergeRemoteToLocal(parts, outbounds, assemblies, pickTasks, data);
+      if (merged.added === 0) {
+        alert("已是最新，无需更新");
+      } else {
+        replaceAll(merged.parts, merged.outbounds, merged.assemblies, merged.pickTasks);
+        alert(`拉取完成：新增 ${merged.added} 条记录`);
+      }
+      const now = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+      setLastSyncTime(now);
+      localStorage.setItem("parts_manager_last_sync", now);
+      setSyncStatus("success");
+      setTimeout(() => setSyncStatus("idle"), 2000);
+    } catch (err) {
+      alert("拉取失败：" + (err as Error).message);
+      setSyncStatus("error");
+      setTimeout(() => setSyncStatus("idle"), 3000);
+    }
+  };
+
   return (
-    <Layout onExport={handleExport} onImport={() => handleImportClick("merge")}>
+    <Layout onExport={handleExport} onImport={() => handleImportClick("merge")} onSyncPush={handleSyncPush} onSyncPull={handleSyncPull} syncStatus={syncStatus} lastSyncTime={lastSyncTime}>
       <input
         ref={fileRef}
         type="file"

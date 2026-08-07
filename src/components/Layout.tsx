@@ -8,14 +8,26 @@ import {
   ClipboardList,
   Warehouse,
   Settings,
+  Cloud,
+  CloudOff,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ApiSettingsDialog from "@/components/ApiSettingsDialog";
+import SyncSettingsDialog from "@/components/SyncSettingsDialog";
+import { isSyncConfigured } from "@/utils/sync";
+
+export type SyncStatus = "idle" | "syncing" | "success" | "error";
 
 interface LayoutProps {
   children: React.ReactNode;
   onExport?: () => void;
   onImport?: () => void;
+  onSyncPush?: () => void;
+  onSyncPull?: () => void;
+  syncStatus?: SyncStatus;
+  lastSyncTime?: string;
 }
 
 const NAV_ITEMS = [
@@ -23,10 +35,11 @@ const NAV_ITEMS = [
   { to: "/assemblies", label: "组装清单", icon: ClipboardList },
 ];
 
-export default function Layout({ children, onExport, onImport }: LayoutProps) {
+export default function Layout({ children, onExport, onImport, onSyncPush, onSyncPull, syncStatus, lastSyncTime }: LayoutProps) {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [syncSettingsOpen, setSyncSettingsOpen] = useState(false);
 
   const isActive = (to: string) =>
     to === "/" ? pathname === "/" : pathname.startsWith(to);
@@ -102,6 +115,48 @@ export default function Layout({ children, onExport, onImport }: LayoutProps) {
               >
                 <Settings size={18} />
               </button>
+              {/* 同步按钮 */}
+              {isSyncConfigured() ? (
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={onSyncPull}
+                    disabled={syncStatus === "syncing"}
+                    className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors disabled:opacity-50"
+                    title="从云端拉取"
+                  >
+                    <Download size={16} />
+                  </button>
+                  <button
+                    onClick={onSyncPush}
+                    disabled={syncStatus === "syncing"}
+                    className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors disabled:opacity-50"
+                    title="推送到云端"
+                  >
+                    {syncStatus === "syncing" ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : syncStatus === "success" ? (
+                      <Cloud size={16} className="text-green-400" />
+                    ) : syncStatus === "error" ? (
+                      <CloudOff size={16} className="text-red-400" />
+                    ) : (
+                      <Cloud size={16} />
+                    )}
+                  </button>
+                  {lastSyncTime && (
+                    <span className="text-[10px] text-steel-500 font-mono-num hidden lg:inline">
+                      {lastSyncTime}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => setSyncSettingsOpen(true)}
+                  className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors"
+                  title="设置云端同步"
+                >
+                  <CloudOff size={18} />
+                </button>
+              )}
               <Link
                 to="/add"
                 className={cn(
@@ -127,7 +182,7 @@ export default function Layout({ children, onExport, onImport }: LayoutProps) {
       {/* 底栏 */}
       <footer className="bg-steel-800 text-steel-400 text-xs py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-          <span>数据本地存储 · 无需联网</span>
+          <span>数据本地存储 · 支持云端同步</span>
           <span className="font-mono-num">v1.1</span>
         </div>
       </footer>
@@ -135,6 +190,10 @@ export default function Layout({ children, onExport, onImport }: LayoutProps) {
       <ApiSettingsDialog
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
+      />
+      <SyncSettingsDialog
+        open={syncSettingsOpen}
+        onClose={() => setSyncSettingsOpen(false)}
       />
     </div>
   );
