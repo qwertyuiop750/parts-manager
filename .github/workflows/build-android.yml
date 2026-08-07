@@ -16,7 +16,7 @@ jobs:
       - name: 配置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: 配置 JDK 17
@@ -28,10 +28,14 @@ jobs:
       - name: 配置 Android SDK
         uses: android-actions/setup-android@v3
         with:
+          accept-android-sdk-licenses: true
           packages: |
             platform-tools
             platforms;android-36
             build-tools;36.0.0
+
+      - name: 接受 Android SDK 许可
+        run: yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: 安装依赖
         run: npm ci
@@ -41,6 +45,10 @@ jobs:
 
       - name: 同步到 Android 项目
         run: npx cap sync android
+
+      - name: 授予 gradlew 执行权限
+        working-directory: android
+        run: chmod +x gradlew
 
       - name: 编译 Debug APK
         working-directory: android
