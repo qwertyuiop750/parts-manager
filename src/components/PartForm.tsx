@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Save, ArrowLeft, MapPin, Package, Boxes, AlertCircle } from "lucide-react";
 import type { Part, PartFormData } from "@/types";
@@ -37,11 +37,16 @@ export default function PartForm({ mode, initial }: PartFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const formValueRef = useRef(form);
+
+  // 同步 form 到 ref，确保验证时总是读取最新值
+  useEffect(() => {
+    formValueRef.current = form;
+  }, [form]);
 
   // 验证失败后滚动到第一个错误字段
   useEffect(() => {
     if (submitAttempted && Object.keys(errors).length > 0) {
-      // 找到第一个有错误的字段并滚动到它
       const firstErrorKey = Object.keys(errors)[0];
       const errorElement = formRef.current?.querySelector(`[data-field="${firstErrorKey}"]`);
       if (errorElement) {
@@ -50,44 +55,39 @@ export default function PartForm({ mode, initial }: PartFormProps) {
     }
   }, [errors, submitAttempted]);
 
-  const set = <K extends keyof PartFormData>(key: K, value: PartFormData[K]) => {
+  const set = useCallback(<K extends keyof PartFormData>(key: K, value: PartFormData[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-    if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
-  };
+    // 清除该字段的错误
+    setErrors((e) => {
+      if (e[key]) {
+        const { [key]: _, ...rest } = e;
+        return rest;
+      }
+      return e;
+    });
+  }, []);
 
-  const validate = (): boolean => {
+  const validate = useCallback((data: PartFormData): Record<string, string> => {
     const errs: Record<string, string> = {};
-    if (!form.name.trim()) errs.name = "请输入中文名";
-    if (!form.spec.trim()) errs.spec = "请输入规格";
-    if (!form.zone.trim()) errs.zone = "请输入库区";
-    if (!form.shelf.trim()) errs.shelf = "请输入货架";
-    if (!form.layer.trim()) errs.layer = "请输入层";
-    if (!form.bin.trim()) errs.bin = "请输入位";
-    if (form.quantity < 0) errs.quantity = "数量不能为负";
-    if (form.safetyStock < 0) errs.safetyStock = "不能为负";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
-  const validateForm = (): Record<string, string> => {
-    const errs: Record<string, string> = {};
-    if (!form.name.trim()) errs.name = "请输入中文名";
-    if (!form.spec.trim()) errs.spec = "请输入规格";
-    if (!form.zone.trim()) errs.zone = "请输入库区";
-    if (!form.shelf.trim()) errs.shelf = "请输入货架";
-    if (!form.layer.trim()) errs.layer = "请输入层";
-    if (!form.bin.trim()) errs.bin = "请输入位";
-    if (form.quantity < 0) errs.quantity = "数量不能为负";
-    if (form.safetyStock < 0) errs.safetyStock = "不能为负";
+    if (!data.name.trim()) errs.name = "请输入中文名";
+    if (!data.spec.trim()) errs.spec = "请输入规格";
+    if (!data.zone.trim()) errs.zone = "请输入库区";
+    if (!data.shelf.trim()) errs.shelf = "请输入货架";
+    if (!data.layer.trim()) errs.layer = "请输入层";
+    if (!data.bin.trim()) errs.bin = "请输入位";
+    if (data.quantity < 0) errs.quantity = "数量不能为负";
+    if (data.safetyStock < 0) errs.safetyStock = "不能为负";
     return errs;
-  };
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    const errs = validateForm();
+    setSubmitAttempted(true);
+    // 使用 ref 获取最新的表单数据，避免闭包陷阱
+    const currentForm = formValueRef.current;
+    const errs = validate(currentForm);
     setErrors(errs);
     if (Object.keys(errs).length > 0) {
-      // 验证失败时滚动到第一个错误字段
       const firstError = Object.keys(errs)[0];
       setTimeout(() => {
         const element = document.querySelector(`[data-field="${firstError}"]`);
@@ -98,15 +98,15 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       return;
     }
     const data: PartFormData = {
-      ...form,
-      name: form.name.trim(),
-      spec: form.spec.trim(),
-      category: form.category.trim(),
-      zone: form.zone.trim(),
-      shelf: form.shelf.trim(),
-      layer: form.layer.trim(),
-      bin: form.bin.trim(),
-      remark: form.remark.trim(),
+      ...currentForm,
+      name: currentForm.name.trim(),
+      spec: currentForm.spec.trim(),
+      category: currentForm.category.trim(),
+      zone: currentForm.zone.trim(),
+      shelf: currentForm.shelf.trim(),
+      layer: currentForm.layer.trim(),
+      bin: currentForm.bin.trim(),
+      remark: currentForm.remark.trim(),
     };
     if (mode === "edit" && initial) {
       updatePart(initial.id, data);
@@ -115,7 +115,7 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       const part = addPart(data);
       navigate(`/detail/${part.id}`);
     }
-  };
+  }, [validate, mode, initial, addPart, updatePart, navigate]);
 
   const locPath = locationPath(form);
   const errorCount = Object.keys(errors).length;
