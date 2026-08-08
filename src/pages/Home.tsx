@@ -240,10 +240,10 @@ export default function Home() {
           <div className="relative flex-1">
             <Search
               size={20}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-steel-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-neon-cyan/60"
             />
             <input
-              className="w-full pl-11 pr-4 py-3 text-base bg-white border-2 border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400 placeholder:text-steel-400 transition-colors"
+              className="w-full pl-11 pr-4 py-3 text-base cyber-input rounded-sm"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="输入中文名 / 规格 / 位置关键字…"
@@ -251,7 +251,7 @@ export default function Home() {
             {keyword && (
               <button
                 onClick={() => setKeyword("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-steel-400 hover:text-steel-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-steel-500 hover:text-neon-pink"
               >
                 <X size={18} />
               </button>
@@ -293,17 +293,17 @@ export default function Home() {
       <div className="flex gap-6">
         {/* 筛选侧栏 */}
         <aside className="hidden lg:block w-56 shrink-0">
-          <div className="bg-white border border-steel-200 rounded-sm p-4 sticky top-24">
+          <div className="cyber-card rounded-sm p-4 sticky top-24">
             <div className="flex items-center gap-2 mb-4">
-              <Filter size={16} className="text-hazard-600" />
-              <h3 className="font-bold text-steel-800 text-sm">筛选</h3>
+              <Filter size={16} className="text-neon-cyan" />
+              <h3 className="font-bold text-steel-200 text-sm">筛选</h3>
               {hasFilter && (
                 <button
                   onClick={() => {
                     setZoneFilter("");
                     setCategoryFilter("");
                   }}
-                  className="ml-auto text-xs text-steel-400 hover:text-red-500"
+                  className="ml-auto text-xs text-steel-500 hover:text-neon-pink"
                 >
                   清除
                 </button>
@@ -312,9 +312,9 @@ export default function Home() {
 
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-steel-500 mb-1.5">库区</p>
+                <p className="text-xs text-steel-400 mb-1.5">库区</p>
                 <select
-                  className="w-full px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                  className="w-full px-2.5 py-1.5 text-sm cyber-input rounded-sm"
                   value={zoneFilter}
                   onChange={(e) => setZoneFilter(e.target.value)}
                 >
@@ -327,9 +327,9 @@ export default function Home() {
                 </select>
               </div>
               <div>
-                <p className="text-xs text-steel-500 mb-1.5">分类</p>
+                <p className="text-xs text-steel-400 mb-1.5">分类</p>
                 <select
-                  className="w-full px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                  className="w-full px-2.5 py-1.5 text-sm cyber-input rounded-sm"
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
                 >
@@ -342,9 +342,9 @@ export default function Home() {
                 </select>
               </div>
               <div>
-                <p className="text-xs text-steel-500 mb-1.5">排序</p>
+                <p className="text-xs text-steel-400 mb-1.5">排序</p>
                 <select
-                  className="w-full px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                  className="w-full px-2.5 py-1.5 text-sm cyber-input rounded-sm"
                   value={sortKey}
                   onChange={(e) => setSortKey(e.target.value as SortKey)}
                 >
@@ -355,11 +355,11 @@ export default function Home() {
                   ))}
                 </select>
               </div>
-              <div className="pt-2 border-t border-steel-200">
+              <div className="pt-2 border-t border-neon-cyan/20">
                 <button
                   onClick={handleCheckUpdate}
                   disabled={checkingUpdate}
-                  className="w-full px-2.5 py-1.5 text-sm bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors disabled:opacity-50"
+                  className="w-full px-2.5 py-1.5 text-sm neon-btn rounded-sm disabled:opacity-50"
                 >
                   {checkingUpdate ? "检查中..." : "检查更新"}
                 </button>
@@ -371,10 +371,10 @@ export default function Home() {
         {/* 配件表格 */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-steel-500">
-              共 <span className="font-mono-num font-bold text-steel-800">{filtered.length}</span> 条
+            <p className="text-sm text-steel-400">
+              共 <span className="font-mono-num font-bold text-neon-cyan">{filtered.length}</span> 条
               {filtered.length !== parts.length && (
-                <span className="text-steel-400"> / {parts.length}</span>
+                <span className="text-steel-500"> / {parts.length}</span>
               )}
             </p>
             <div className="flex gap-2">
@@ -382,13 +382,13 @@ export default function Home() {
               <button
                 onClick={handleCheckUpdate}
                 disabled={checkingUpdate}
-                className="lg:hidden px-2.5 py-1.5 text-sm bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors disabled:opacity-50"
+                className="lg:hidden px-2.5 py-1.5 text-sm neon-btn rounded-sm disabled:opacity-50"
               >
                 {checkingUpdate ? "检查中..." : "检查更新"}
               </button>
               {/* 移动端排序 */}
               <select
-                className="lg:hidden px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                className="lg:hidden px-2.5 py-1.5 text-sm cyber-input rounded-sm"
                 value={sortKey}
                 onChange={(e) => setSortKey(e.target.value as SortKey)}
               >

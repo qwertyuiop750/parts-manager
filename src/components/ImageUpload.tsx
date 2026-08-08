@@ -30,8 +30,8 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
     <div className="flex items-start gap-4">
       <div
         className={cn(
-          "relative w-28 h-28 shrink-0 border-2 border-dashed border-steel-300 rounded-sm overflow-hidden bg-steel-50 flex items-center justify-center",
-          value && "border-solid border-steel-200"
+          "relative w-28 h-28 shrink-0 border-2 border-dashed border-neon-cyan/30 rounded-sm overflow-hidden bg-steel-900 flex items-center justify-center",
+          value && "border-solid border-neon-cyan/40"
         )}
       >
         {value ? (
@@ -40,16 +40,16 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
             <button
               type="button"
               onClick={() => onChange(undefined)}
-              className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-sm hover:bg-red-600"
+              className="absolute top-1 right-1 p-1 bg-neon-pink/80 text-white rounded-sm hover:bg-neon-pink"
               title="删除图片"
             >
               <Trash2 size={12} />
             </button>
           </>
         ) : loading ? (
-          <Loader2 size={24} className="text-steel-400 animate-spin" />
+          <Loader2 size={24} className="text-neon-cyan animate-spin" />
         ) : (
-          <ImagePlus size={28} className="text-steel-400" />
+          <ImagePlus size={28} className="text-steel-500" />
         )}
       </div>
       <div className="pt-1">
@@ -57,14 +57,14 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={loading}
-          className="px-3 py-1.5 text-sm font-medium text-hazard-700 bg-hazard-50 border border-hazard-300 hover:bg-hazard-100 rounded-sm transition-colors disabled:opacity-50"
+          className="px-3 py-1.5 text-sm font-medium neon-btn rounded-sm disabled:opacity-50"
         >
           {value ? "更换图片" : "上传图片"}
         </button>
-        <p className="mt-1.5 text-xs text-steel-400">
+        <p className="mt-1.5 text-xs text-steel-500">
           选填，用于辨认相似配件；自动压缩存储
         </p>
-        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+        {error && <p className="mt-1 text-xs text-neon-pink">{error}</p>}
       </div>
       <input
         ref={inputRef}

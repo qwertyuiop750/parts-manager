@@ -41,16 +41,16 @@ export default function OutboundForm({ part }: OutboundFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-steel-200 rounded-sm overflow-hidden"
+      className="cyber-card rounded-sm overflow-hidden"
     >
-      <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-        <PackageMinus size={18} className="text-hazard-600" />
-        <h3 className="font-bold text-steel-800">出库登记</h3>
+      <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+        <PackageMinus size={18} className="text-neon-cyan" />
+        <h3 className="font-bold text-steel-200">出库登记</h3>
       </div>
       <div className="p-5 space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-sm font-medium text-steel-700">
+            <label className="text-sm font-medium text-steel-300">
               出库数量
             </label>
             <input
@@ -63,8 +63,8 @@ export default function OutboundForm({ part }: OutboundFormProps) {
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-steel-700">
-              领用人<span className="text-red-500 ml-0.5">*</span>
+            <label className="text-sm font-medium text-steel-300">
+              领用人<span className="text-neon-pink ml-0.5">*</span>
             </label>
             <input
               className={`${inputCls} mt-1`}
@@ -75,7 +75,7 @@ export default function OutboundForm({ part }: OutboundFormProps) {
           </div>
         </div>
         <div>
-          <label className="text-sm font-medium text-steel-700">备注</label>
+          <label className="text-sm font-medium text-steel-300">备注</label>
           <input
             className={`${inputCls} mt-1`}
             value={remark}
@@ -83,11 +83,11 @@ export default function OutboundForm({ part }: OutboundFormProps) {
             placeholder="选填"
           />
         </div>
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-neon-pink">{error}</p>}
         <button
           type="submit"
           disabled={part.quantity <= 0}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 disabled:bg-steel-200 disabled:text-steel-400 disabled:cursor-not-allowed rounded-sm transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-bold neon-btn rounded-sm disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <Minus size={16} strokeWidth={2.5} />
           确认出库

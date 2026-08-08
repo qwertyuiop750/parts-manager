@@ -59,7 +59,7 @@ export default function PartDetail() {
         <div className="flex items-center justify-between gap-3 mb-6">
           <Link
             to="/"
-            className="flex items-center gap-1.5 text-sm text-steel-600 hover:text-steel-900"
+            className="flex items-center gap-1.5 text-sm text-steel-400 hover:text-neon-cyan"
           >
             <ArrowLeft size={18} />
             返回台账
@@ -67,14 +67,14 @@ export default function PartDetail() {
           <div className="flex items-center gap-2">
             <Link
               to={`/edit/${part.id}`}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-sm transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-neon-cyan bg-neon-cyan/10 border border-neon-cyan/30 hover:bg-neon-cyan/20 rounded-sm transition-colors"
             >
               <Pencil size={15} />
               编辑
             </Link>
             <button
               onClick={() => setConfirmOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-sm transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-neon-pink bg-neon-pink/10 border border-neon-pink/30 hover:bg-neon-pink/20 rounded-sm transition-colors"
             >
               <Trash2 size={15} />
               删除
@@ -83,17 +83,17 @@ export default function PartDetail() {
         </div>
 
         {/* 位置指引卡片 */}
-        <div className="bg-hazard-400 border-2 border-hazard-500 rounded-sm p-6 mb-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-hazard-300/40 rounded-full -translate-y-12 translate-x-12" />
+        <div className="bg-neon-cyan/10 border border-neon-cyan/40 rounded-sm p-6 mb-6 relative overflow-hidden shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 rounded-full -translate-y-12 translate-x-12" />
           <div className="relative">
-            <div className="flex items-center gap-2 text-steel-900/70 text-sm font-medium mb-2">
+            <div className="flex items-center gap-2 text-neon-cyan/70 text-sm font-medium mb-2">
               <MapPin size={16} strokeWidth={2.5} />
               仓位位置
             </div>
-            <p className="text-3xl font-bold font-mono-num text-steel-900 break-all">
+            <p className="text-3xl font-bold font-mono-num text-neon-cyan neon-text break-all">
               {path || "未设置位置"}
             </p>
-            <p className="mt-2 text-sm text-steel-800/70">
+            <p className="mt-2 text-sm text-steel-400">
               按以上路径前往取件
             </p>
           </div>
@@ -103,10 +103,10 @@ export default function PartDetail() {
           {/* 左侧：配件信息 + 出库记录 */}
           <div className="lg:col-span-2 space-y-6">
             {/* 配件信息 */}
-            <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-              <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-                <Package size={18} className="text-hazard-600" />
-                <h3 className="font-bold text-steel-800">配件信息</h3>
+            <section className="cyber-card rounded-sm overflow-hidden">
+              <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+                <Package size={18} className="text-neon-cyan" />
+                <h3 className="font-bold text-steel-200">配件信息</h3>
               </div>
               <div className="p-5 grid grid-cols-2 gap-x-6 gap-y-4">
                 {part.image && (
@@ -115,7 +115,7 @@ export default function PartDetail() {
                     <img
                       src={part.image}
                       alt={part.name}
-                      className="max-h-48 rounded-sm border border-steel-200 object-contain"
+                      className="max-h-48 rounded-sm border border-neon-cyan/20 object-contain"
                     />
                   </div>
                 )}
@@ -136,20 +136,20 @@ export default function PartDetail() {
                   <p className="text-xs text-steel-500 mb-1">当前库存</p>
                   <p
                     className={`text-2xl font-bold font-mono-num ${
-                      low ? "text-red-600" : "text-steel-800"
+                      low ? "text-neon-pink neon-text-pink" : "text-neon-cyan"
                     }`}
                   >
                     {part.quantity}
-                    <span className="text-sm font-normal text-steel-400 ml-1">
+                    <span className="text-sm font-normal text-steel-500 ml-1">
                       {part.unit}
                     </span>
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-steel-500 mb-1">安全库存</p>
-                  <p className="text-2xl font-bold font-mono-num text-steel-800">
+                  <p className="text-2xl font-bold font-mono-num text-steel-300">
                     {part.safetyStock}
-                    <span className="text-sm font-normal text-steel-400 ml-1">
+                    <span className="text-sm font-normal text-steel-500 ml-1">
                       {part.unit}
                     </span>
                   </p>
@@ -157,12 +157,12 @@ export default function PartDetail() {
                 {part.remark && (
                   <div className="col-span-2">
                     <p className="text-xs text-steel-500 mb-1">备注</p>
-                    <p className="text-sm text-steel-700 bg-steel-50 px-3 py-2 rounded-sm">
+                    <p className="text-sm text-steel-300 bg-steel-800/50 px-3 py-2 rounded-sm border border-neon-cyan/10">
                       {part.remark}
                     </p>
                   </div>
                 )}
-                <div className="col-span-2 flex items-center gap-4 pt-2 border-t border-steel-100 text-xs text-steel-400">
+                <div className="col-span-2 flex items-center gap-4 pt-2 border-t border-neon-cyan/10 text-xs text-steel-500">
                   <span className="flex items-center gap-1">
                     <Clock size={12} />
                     创建：{formatDateTime(part.createdAt)}
@@ -176,17 +176,17 @@ export default function PartDetail() {
             </section>
 
             {/* 出库记录 */}
-            <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-              <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-                <History size={18} className="text-hazard-600" />
-                <h3 className="font-bold text-steel-800">出库记录</h3>
-                <span className="ml-auto text-xs text-steel-400 font-mono-num">
+            <section className="cyber-card rounded-sm overflow-hidden">
+              <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+                <History size={18} className="text-neon-cyan" />
+                <h3 className="font-bold text-steel-200">出库记录</h3>
+                <span className="ml-auto text-xs text-steel-500 font-mono-num">
                   共 {sortedOutbounds.length} 条
                 </span>
               </div>
               <div className="p-5">
                 {sortedOutbounds.length === 0 ? (
-                  <p className="text-center text-steel-400 text-sm py-8">
+                  <p className="text-center text-steel-500 text-sm py-8">
                     暂无出库记录
                   </p>
                 ) : (
@@ -194,20 +194,20 @@ export default function PartDetail() {
                     {sortedOutbounds.map((o) => (
                       <li
                         key={o.id}
-                        className="flex items-start gap-3 pb-3 border-b border-steel-100 last:border-0 last:pb-0"
+                        className="flex items-start gap-3 pb-3 border-b border-neon-cyan/10 last:border-0 last:pb-0"
                       >
-                        <div className="flex items-center justify-center w-8 h-8 bg-red-50 text-red-500 rounded-sm shrink-0">
+                        <div className="flex items-center justify-center w-8 h-8 bg-neon-pink/10 text-neon-pink rounded-sm shrink-0 border border-neon-pink/20">
                           <Package size={15} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold font-mono-num text-red-600">
+                            <span className="font-bold font-mono-num text-neon-pink">
                               -{o.quantity}
                             </span>
-                            <span className="text-sm text-steel-400">
+                            <span className="text-sm text-steel-500">
                               {part.unit}
                             </span>
-                            <span className="flex items-center gap-1 text-sm text-steel-600">
+                            <span className="flex items-center gap-1 text-sm text-steel-400">
                               <User size={12} />
                               {o.receiver || "—"}
                             </span>
@@ -217,7 +217,7 @@ export default function PartDetail() {
                               {o.remark}
                             </p>
                           )}
-                          <p className="text-xs text-steel-400 mt-0.5 font-mono-num">
+                          <p className="text-xs text-steel-500 mt-0.5 font-mono-num">
                             {formatDateTime(o.timestamp)}
                           </p>
                         </div>
@@ -232,7 +232,7 @@ export default function PartDetail() {
           {/* 右侧：出库操作 + 预警提示 */}
           <div className="space-y-4">
             {low && (
-              <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-sm text-sm">
+              <div className="flex items-center gap-2 bg-neon-pink/10 border border-neon-pink/30 text-neon-pink px-4 py-3 rounded-sm text-sm shadow-[0_0_10px_rgba(255,0,110,0.1)]">
                 <AlertTriangle size={18} />
                 <span>
                   库存预警：当前 {part.quantity}
@@ -242,7 +242,7 @@ export default function PartDetail() {
               </div>
             )}
             {part.quantity <= 0 ? (
-              <div className="bg-white border border-steel-200 rounded-sm p-6 text-center text-steel-400 text-sm">
+              <div className="cyber-card rounded-sm p-6 text-center text-steel-500 text-sm">
                 库存为 0，无法出库
               </div>
             ) : (
@@ -282,7 +282,7 @@ function InfoItem({
         <Icon size={12} />
         {label}
       </p>
-      <p className={`text-steel-800 ${mono ? "font-mono-num" : ""}`}>{value}</p>
+      <p className={`text-steel-200 ${mono ? "font-mono-num" : ""}`}>{value}</p>
     </div>
   );
 }

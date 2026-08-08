@@ -83,10 +83,10 @@ export default function AssemblyForm({
 
   return (
     <div className="max-w-3xl animate-fade-up">
-      <div className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-          <Package size={18} className="text-hazard-600" />
-          <h2 className="font-bold text-steel-800">
+      <div className="cyber-card rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+          <Package size={18} className="text-neon-cyan" />
+          <h2 className="font-bold text-steel-200">
             {mode === "edit" ? "编辑组装清单" : "新建组装清单"}
           </h2>
         </div>
@@ -94,8 +94,8 @@ export default function AssemblyForm({
           {/* 基本信息 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-steel-700">
-                设备名称<span className="text-red-500 ml-0.5">*</span>
+              <label className="text-sm font-medium text-steel-300">
+                设备名称<span className="text-neon-pink ml-0.5">*</span>
               </label>
               <input
                 className={`${inputCls} mt-1`}
@@ -108,7 +108,7 @@ export default function AssemblyForm({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-steel-700">备注</label>
+              <label className="text-sm font-medium text-steel-300">备注</label>
               <input
                 className={`${inputCls} mt-1`}
                 value={remark}
@@ -120,13 +120,13 @@ export default function AssemblyForm({
 
           {/* 添加配件 */}
           <div>
-            <label className="text-sm font-medium text-steel-700">
+            <label className="text-sm font-medium text-steel-300">
               添加配件到清单
             </label>
             <div className="relative mt-1">
               <Search
                 size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-steel-400"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-neon-cyan/60"
               />
               <input
                 className={`${inputCls} pl-9`}
@@ -135,21 +135,21 @@ export default function AssemblyForm({
                 placeholder="搜索配件名/规格/位置后点击添加"
               />
               {search && searchResults.length > 0 && (
-                <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-steel-200 rounded-sm shadow-lg max-h-64 overflow-auto">
+                <div className="absolute z-10 left-0 right-0 mt-1 bg-steel-900 border border-neon-cyan/30 rounded-sm shadow-lg max-h-64 overflow-auto">
                   {searchResults.map((p) => (
                     <button
                       key={p.id}
                       onClick={() => addItem(p.id)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-hazard-50 border-b border-steel-100 last:border-0"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-neon-cyan/10 border-b border-neon-cyan/10 last:border-0"
                     >
-                      <Plus size={14} className="text-hazard-600 shrink-0" />
-                      <span className="text-sm font-medium text-steel-800">
+                      <Plus size={14} className="text-neon-cyan shrink-0" />
+                      <span className="text-sm font-medium text-steel-200">
                         {p.name}
                       </span>
-                      <span className="text-xs font-mono-num text-steel-500">
+                      <span className="text-xs font-mono-num text-steel-400">
                         {p.spec}
                       </span>
-                      <span className="ml-auto text-xs text-steel-400 font-mono-num">
+                      <span className="ml-auto text-xs text-steel-500 font-mono-num">
                         {locationPath(p)}
                       </span>
                     </button>
@@ -157,7 +157,7 @@ export default function AssemblyForm({
                 </div>
               )}
               {search && searchResults.length === 0 && (
-                <p className="mt-1 text-xs text-steel-400">
+                <p className="mt-1 text-xs text-steel-500">
                   没有可添加的配件
                 </p>
               )}
@@ -167,15 +167,15 @@ export default function AssemblyForm({
           {/* 已选配件列表 */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-steel-700">
+              <p className="text-sm font-medium text-steel-300">
                 清单配件
-                <span className="ml-1 text-xs text-steel-400 font-mono-num">
+                <span className="ml-1 text-xs text-steel-500 font-mono-num">
                   ({items.length})
                 </span>
               </p>
             </div>
             {items.length === 0 ? (
-              <p className="text-center text-steel-400 text-sm py-8 bg-steel-50 rounded-sm">
+              <p className="text-center text-steel-500 text-sm py-8 bg-steel-900/50 rounded-sm">
                 还未添加配件
               </p>
             ) : (
@@ -186,21 +186,21 @@ export default function AssemblyForm({
                   return (
                     <li
                       key={it.partId}
-                      className="flex items-center gap-3 p-3 bg-steel-50 rounded-sm border border-steel-100"
+                      className="flex items-center gap-3 p-3 bg-steel-900/50 rounded-sm border border-neon-cyan/15"
                     >
                       {p.image && (
                         <img
                           src={p.image}
                           alt={p.name}
-                          className="w-10 h-10 rounded-sm object-cover border border-steel-200 shrink-0"
+                          className="w-10 h-10 rounded-sm object-cover border border-neon-cyan/20 shrink-0"
                         />
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-steel-800 text-sm">
+                          <span className="font-medium text-steel-200 text-sm">
                             {p.name}
                           </span>
-                          <span className="text-xs font-mono-num text-steel-500">
+                          <span className="text-xs font-mono-num text-steel-400">
                             {p.spec}
                           </span>
                         </div>
@@ -216,13 +216,13 @@ export default function AssemblyForm({
                           onChange={(e) =>
                             setQty(it.partId, Number(e.target.value))
                           }
-                          className="w-16 px-2 py-1 text-sm text-center font-mono-num bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                          className="w-16 px-2 py-1 text-sm text-center font-mono-num cyber-input rounded-sm"
                         />
-                        <span className="text-xs text-steel-400">{p.unit}</span>
+                        <span className="text-xs text-steel-500">{p.unit}</span>
                       </div>
                       <button
                         onClick={() => removeItem(it.partId)}
-                        className="p-1.5 text-steel-400 hover:text-red-500 hover:bg-red-50 rounded-sm"
+                        className="p-1.5 text-steel-500 hover:text-neon-pink hover:bg-neon-pink/10 rounded-sm"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -233,19 +233,19 @@ export default function AssemblyForm({
             )}
           </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {error && <p className="text-sm text-neon-pink">{error}</p>}
 
           {/* 操作按钮 */}
-          <div className="flex justify-end gap-2 pt-2 border-t border-steel-100">
+          <div className="flex justify-end gap-2 pt-2 border-t border-neon-cyan/15">
             <button
               onClick={onCancel}
-              className="px-5 py-2 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors"
+              className="px-5 py-2 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors"
             >
               取消
             </button>
             <button
               onClick={handleSubmit}
-              className="px-5 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+              className="px-5 py-2 text-sm font-bold neon-btn rounded-sm"
             >
               保存清单
             </button>

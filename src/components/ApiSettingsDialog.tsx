@@ -99,28 +99,28 @@ export default function ApiSettingsDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-950/80 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-sm shadow-2xl w-full max-w-md animate-scale-in max-h-[90vh] flex flex-col"
+        className="cyber-card rounded-sm shadow-[0_0_30px_rgba(0,240,255,0.15)] w-full max-w-md animate-scale-in max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-5 border-b border-steel-100">
+        <div className="flex items-center justify-between p-5 border-b border-neon-cyan/20">
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-9 h-9 bg-hazard-50 text-hazard-600 rounded-sm">
+            <div className="flex items-center justify-center w-9 h-9 bg-neon-purple/15 text-neon-purple border border-neon-purple/30 rounded-sm">
               <KeyRound size={18} />
             </div>
             <div>
-              <h3 className="font-bold text-steel-800">识别接口设置</h3>
-              <p className="text-xs text-steel-500">
+              <h3 className="font-bold text-steel-200">识别接口设置</h3>
+              <p className="text-xs text-steel-400">
                 配置视觉模型，用于拍照识别配件表格
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-steel-400 hover:text-steel-600"
+            className="text-steel-500 hover:text-neon-cyan"
           >
             <X size={18} />
           </button>
@@ -129,14 +129,14 @@ export default function ApiSettingsDialog({
         <div className="p-5 space-y-4 overflow-y-auto">
           {/* 预设 */}
           <div>
-            <p className="text-xs text-steel-500 mb-1.5">快速选择</p>
+            <p className="text-xs text-steel-400 mb-1.5">快速选择</p>
             <div className="flex flex-wrap gap-1.5">
               {DEFAULT_PRESETS.map((p) => (
                 <button
                   key={p.label}
                   type="button"
                   onClick={() => applyPreset(p)}
-                  className="px-2.5 py-1 text-xs text-steel-600 bg-steel-100 hover:bg-hazard-100 hover:text-hazard-700 rounded-sm transition-colors"
+                  className="px-2.5 py-1 text-xs text-steel-300 bg-steel-800 hover:bg-neon-purple/15 hover:text-neon-purple border border-neon-purple/20 rounded-sm transition-colors"
                 >
                   {p.label}
                 </button>
@@ -145,8 +145,8 @@ export default function ApiSettingsDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-steel-700">
-              接口地址<span className="text-red-500 ml-0.5">*</span>
+            <label className="text-sm font-medium text-steel-300">
+              接口地址<span className="text-neon-pink ml-0.5">*</span>
             </label>
             <input
               className={`${inputCls} mt-1 font-mono-num text-xs`}
@@ -156,14 +156,14 @@ export default function ApiSettingsDialog({
               autoComplete="off"
               spellCheck={false}
             />
-            <p className="mt-1 text-xs text-steel-400">
+            <p className="mt-1 text-xs text-steel-500">
               OpenAI 兼容接口根路径（无需带 /chat/completions）
             </p>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-steel-700">
-              API 密钥<span className="text-red-500 ml-0.5">*</span>
+            <label className="text-sm font-medium text-steel-300">
+              API 密钥<span className="text-neon-pink ml-0.5">*</span>
             </label>
             <div className="relative mt-1">
               <input
@@ -178,20 +178,20 @@ export default function ApiSettingsDialog({
               <button
                 type="button"
                 onClick={() => setShowKey((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-steel-400 hover:text-steel-600 p-1"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-steel-500 hover:text-neon-cyan p-1"
                 title={showKey ? "隐藏" : "显示"}
               >
                 {showKey ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
-            <p className="mt-1 text-xs text-steel-400">
+            <p className="mt-1 text-xs text-steel-500">
               仅保存在本机，不会上传
             </p>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-steel-700">
-              模型名称<span className="text-red-500 ml-0.5">*</span>
+            <label className="text-sm font-medium text-steel-300">
+              模型名称<span className="text-neon-pink ml-0.5">*</span>
             </label>
             <input
               className={`${inputCls} mt-1 font-mono-num text-xs`}
@@ -204,27 +204,27 @@ export default function ApiSettingsDialog({
           </div>
 
           {error && (
-            <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-sm">
+            <p className="text-xs text-neon-pink bg-neon-pink/10 border border-neon-pink/20 px-3 py-2 rounded-sm">
               {error}
             </p>
           )}
           {saved && (
-            <p className="text-xs text-green-600 bg-green-50 px-3 py-2 rounded-sm">
+            <p className="text-xs text-neon-green bg-neon-green/10 border border-neon-green/20 px-3 py-2 rounded-sm">
               已保存
             </p>
           )}
         </div>
 
-        <div className="flex gap-2 p-4 border-t border-steel-100">
+        <div className="flex gap-2 p-4 border-t border-neon-cyan/15">
           <button
             onClick={onClose}
-            className="flex-1 py-2 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors"
+            className="flex-1 py-2 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors"
           >
             取消
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold neon-btn rounded-sm"
           >
             <Save size={15} />
             保存配置

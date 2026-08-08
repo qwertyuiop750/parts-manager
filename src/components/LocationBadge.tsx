@@ -9,7 +9,6 @@ interface LocationBadgeProps {
   className?: string;
 }
 
-/** 位置路径标签：库区-货架-层-位，黄色高亮 */
 export default function LocationBadge({
   part,
   size = "sm",
@@ -24,14 +23,14 @@ export default function LocationBadge({
       : "text-xs px-2 py-0.5";
 
   if (!path) {
-    return <span className="text-steel-400 text-xs">未设置</span>;
+    return <span className="text-steel-500 text-xs">未设置</span>;
   }
 
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1 font-mono-num font-medium",
-        "bg-hazard-100 text-hazard-700 border border-hazard-300 rounded-sm",
+        "bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/30 rounded-sm",
         sizeCls,
         className
       )}

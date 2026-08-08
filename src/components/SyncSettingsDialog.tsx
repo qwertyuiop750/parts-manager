@@ -120,28 +120,28 @@ export default function SyncSettingsDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-950/80 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-sm shadow-2xl w-full max-w-md animate-scale-in max-h-[90vh] flex flex-col"
+        className="cyber-card rounded-sm shadow-[0_0_30px_rgba(0,240,255,0.15)] w-full max-w-md animate-scale-in max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-5 border-b border-steel-100">
+        <div className="flex items-center justify-between p-5 border-b border-neon-cyan/20">
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-9 h-9 bg-blue-50 text-blue-600 rounded-sm">
+            <div className="flex items-center justify-center w-9 h-9 bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30 rounded-sm">
               <Cloud size={18} />
             </div>
             <div>
-              <h3 className="font-bold text-steel-800">云端同步设置</h3>
-              <p className="text-xs text-steel-500">
+              <h3 className="font-bold text-steel-200">云端同步设置</h3>
+              <p className="text-xs text-steel-400">
                 通过 GitHub 仓库同步数据到其他设备
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-steel-400 hover:text-steel-600"
+            className="text-steel-500 hover:text-neon-cyan"
           >
             <X size={18} />
           </button>
@@ -149,8 +149,8 @@ export default function SyncSettingsDialog({
 
         <div className="p-5 space-y-4 overflow-y-auto">
           <div>
-            <label className="text-sm font-medium text-steel-700">
-              GitHub Token<span className="text-red-500 ml-0.5">*</span>
+            <label className="text-sm font-medium text-steel-300">
+              GitHub Token<span className="text-neon-pink ml-0.5">*</span>
             </label>
             <div className="relative mt-1">
               <input
@@ -169,25 +169,25 @@ export default function SyncSettingsDialog({
                 <button
                   type="button"
                   onClick={() => setShowToken((v) => !v)}
-                  className="text-steel-400 hover:text-steel-600 p-1"
+                  className="text-steel-500 hover:text-neon-cyan p-1"
                   title={showToken ? "隐藏" : "显示"}
                 >
                   {showToken ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
                 {validated === true && (
-                  <CheckCircle size={14} className="text-green-500" />
+                  <CheckCircle size={14} className="text-neon-green" />
                 )}
               </div>
             </div>
-            <p className="mt-1 text-xs text-steel-400">
+            <p className="mt-1 text-xs text-steel-500">
               需要 repo 权限，在 GitHub Settings → Developer settings → Personal access tokens 生成
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-steel-700">
-                用户名<span className="text-red-500 ml-0.5">*</span>
+              <label className="text-sm font-medium text-steel-300">
+                用户名<span className="text-neon-pink ml-0.5">*</span>
               </label>
               <input
                 className={`${inputCls} mt-1 text-xs`}
@@ -202,8 +202,8 @@ export default function SyncSettingsDialog({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-steel-700">
-                仓库名<span className="text-red-500 ml-0.5">*</span>
+              <label className="text-sm font-medium text-steel-300">
+                仓库名<span className="text-neon-pink ml-0.5">*</span>
               </label>
               <input
                 className={`${inputCls} mt-1 text-xs`}
@@ -220,7 +220,7 @@ export default function SyncSettingsDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-steel-700">
+            <label className="text-sm font-medium text-steel-300">
               分支
             </label>
             <input
@@ -231,26 +231,26 @@ export default function SyncSettingsDialog({
               autoComplete="off"
               spellCheck={false}
             />
-            <p className="mt-1 text-xs text-steel-400">默认 main 分支</p>
+            <p className="mt-1 text-xs text-steel-500">默认 main 分支</p>
           </div>
 
           {error && (
-            <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-sm">
+            <p className="text-xs text-neon-pink bg-neon-pink/10 border border-neon-pink/20 px-3 py-2 rounded-sm">
               {error}
             </p>
           )}
           {saved && (
-            <p className="text-xs text-green-600 bg-green-50 px-3 py-2 rounded-sm">
+            <p className="text-xs text-neon-green bg-neon-green/10 border border-neon-green/20 px-3 py-2 rounded-sm">
               已保存
             </p>
           )}
         </div>
 
-        <div className="flex gap-2 p-4 border-t border-steel-100">
+        <div className="flex gap-2 p-4 border-t border-neon-cyan/15">
           {getSyncConfig() && (
             <button
               onClick={handleClear}
-              className="flex items-center justify-center gap-1 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-sm transition-colors"
+              className="flex items-center justify-center gap-1 px-3 py-2 text-sm text-neon-pink hover:bg-neon-pink/10 border border-neon-pink/20 rounded-sm transition-colors"
               title="清除配置"
             >
               <Trash2 size={15} />
@@ -259,13 +259,13 @@ export default function SyncSettingsDialog({
           <button
             onClick={handleValidate}
             disabled={validating}
-            className="flex-1 py-2 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-2 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors disabled:opacity-50"
           >
             {validating ? "验证中…" : "验证连接"}
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold neon-btn rounded-sm"
           >
             <Save size={15} />
             保存配置

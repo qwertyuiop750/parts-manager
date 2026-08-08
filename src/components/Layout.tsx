@@ -44,21 +44,21 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
     to === "/" ? pathname === "/" : pathname.startsWith(to);
 
   return (
-    <div className="min-h-screen flex flex-col bg-steel-100">
-      {/* 顶部导航：留出安全区域，移动端更紧凑 */}
+    <div className="min-h-screen flex flex-col bg-steel-950 cyber-grid">
+      {/* 顶部导航 */}
       <header
-        className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg pt-6 sm:pt-0"
+        className="sticky top-0 z-30 bg-steel-900/95 backdrop-blur-sm border-b border-neon-cyan/30 shadow-[0_0_15px_rgba(0,240,255,0.1)] pt-6 sm:pt-0"
         style={{ paddingTop: 'max(var(--safe-top), 24px)' }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14">
             <div className="flex items-center gap-3 sm:gap-6">
               <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
-                <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-hazard-400 text-steel-900 rounded-sm group-hover:bg-hazard-300 transition-colors">
+                <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan rounded-sm group-hover:bg-neon-cyan/30 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.3)]">
                   <Boxes size={22} strokeWidth={2.5} />
                 </div>
                 <div className="leading-tight hidden sm:block">
-                  <h1 className="font-bold text-base sm:text-lg tracking-wide">配件仓位管家</h1>
+                  <h1 className="font-bold text-base sm:text-lg tracking-wide text-neon-cyan neon-text">配件仓位管家</h1>
                   <p className="text-[10px] text-steel-400 font-mono-num">
                     PARTS · LOCATION · MANAGER
                   </p>
@@ -77,8 +77,8 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                       className={cn(
                         "flex items-center gap-1.5 px-2 sm:px-3 py-2 text-sm font-medium rounded-sm transition-colors",
                         active
-                          ? "bg-steel-700 text-hazard-300"
-                          : "text-steel-300 hover:text-white hover:bg-steel-700/60"
+                          ? "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30"
+                          : "text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10"
                       )}
                     >
                       <Icon size={16} />
@@ -94,7 +94,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                 <>
                   <button
                     onClick={onImport}
-                    className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors"
+                    className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors"
                     title="导入数据"
                   >
                     <Upload size={16} />
@@ -102,7 +102,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                   </button>
                   <button
                     onClick={onExport}
-                    className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors"
+                    className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors"
                     title="导出数据"
                   >
                     <Download size={16} />
@@ -112,7 +112,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
               )}
               <button
                 onClick={() => setSettingsOpen(true)}
-                className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors"
+                className="flex items-center justify-center w-9 h-9 text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors"
                 title="识别接口设置"
               >
                 <Settings size={18} />
@@ -123,7 +123,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                   <button
                     onClick={onSyncPull}
                     disabled={syncStatus === "syncing"}
-                    className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors disabled:opacity-50"
+                    className="flex items-center justify-center w-9 h-9 text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors disabled:opacity-50"
                     title="从云端拉取"
                   >
                     <Download size={16} />
@@ -131,15 +131,15 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                   <button
                     onClick={onSyncPush}
                     disabled={syncStatus === "syncing"}
-                    className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors disabled:opacity-50"
+                    className="flex items-center justify-center w-9 h-9 text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors disabled:opacity-50"
                     title="推送到云端"
                   >
                     {syncStatus === "syncing" ? (
-                      <Loader2 size={16} className="animate-spin" />
+                      <Loader2 size={16} className="animate-spin text-neon-cyan" />
                     ) : syncStatus === "success" ? (
-                      <Cloud size={16} className="text-green-400" />
+                      <Cloud size={16} className="text-neon-green" />
                     ) : syncStatus === "error" ? (
-                      <CloudOff size={16} className="text-red-400" />
+                      <CloudOff size={16} className="text-neon-pink" />
                     ) : (
                       <Cloud size={16} />
                     )}
@@ -153,7 +153,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
               ) : (
                 <button
                   onClick={() => setSyncSettingsOpen(true)}
-                  className="flex items-center justify-center w-9 h-9 text-steel-200 hover:text-white hover:bg-steel-700 rounded-sm transition-colors"
+                  className="flex items-center justify-center w-9 h-9 text-steel-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors"
                   title="设置云端同步"
                 >
                   <CloudOff size={18} />
@@ -162,8 +162,8 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
               <Link
                 to="/add"
                 className={cn(
-                  "flex items-center gap-1.5 px-3 sm:px-4 py-2 text-sm font-medium rounded-sm transition-colors",
-                  "bg-hazard-400 text-steel-900 hover:bg-hazard-300"
+                  "flex items-center gap-1.5 px-3 sm:px-4 py-2 text-sm font-bold rounded-sm transition-colors",
+                  "bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/50 hover:bg-neon-cyan/30 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
                 )}
               >
                 <Plus size={16} strokeWidth={2.5} />
@@ -172,8 +172,8 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
             </div>
           </div>
         </div>
-        {/* 警示条 */}
-        <div className="h-1 bg-gradient-to-r from-hazard-400 via-hazard-300 to-hazard-400" />
+        {/* 霓虹警示条 */}
+        <div className="h-0.5 bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-pink shadow-[0_0_10px_rgba(0,240,255,0.5)]" />
       </header>
 
       {/* 主内容 */}
@@ -186,12 +186,12 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
 
       {/* 底栏 */}
       <footer
-        className="bg-steel-800 text-steel-400 text-xs py-2 sm:py-3"
+        className="bg-steel-900/95 border-t border-neon-cyan/20 text-steel-500 text-xs py-2 sm:py-3"
         style={{ paddingBottom: 'max(var(--safe-bottom), 12px)' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <span>数据本地存储 · 支持云端同步</span>
-          <span className="font-mono-num">v1.1</span>
+          <span className="font-mono-num text-neon-cyan/60">v1.1</span>
         </div>
       </footer>
 

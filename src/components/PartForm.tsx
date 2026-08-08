@@ -37,13 +37,11 @@ export default function PartForm({ mode, initial }: PartFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  // 用 ref 保存最新表单数据，避免 Android WebView 中闭包过期
   const latestForm = useRef(form);
   useEffect(() => {
     latestForm.current = form;
   });
 
-  // 验证失败后滚动到第一个错误字段
   useEffect(() => {
     if (submitAttempted && Object.keys(errors).length > 0) {
       const firstErrorKey = Object.keys(errors)[0];
@@ -66,7 +64,6 @@ export default function PartForm({ mode, initial }: PartFormProps) {
 
   const doSave = () => {
     setSubmitAttempted(true);
-    // 始终从 ref 读取最新数据
     const current = latestForm.current;
     const errs: Record<string, string> = {};
     if (!current.name.trim()) errs.name = "请输入中文名";
@@ -122,18 +119,18 @@ export default function PartForm({ mode, initial }: PartFormProps) {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-sm text-steel-600 hover:text-steel-900 min-h-[44px] min-w-[44px] justify-center"
+          className="flex items-center gap-1.5 text-sm text-steel-400 hover:text-neon-cyan min-h-[44px] min-w-[44px] justify-center"
         >
           <ArrowLeft size={18} />
           <span className="hidden sm:inline">返回</span>
         </button>
-        <h2 className="text-lg font-bold text-steel-800">
+        <h2 className="text-lg font-bold text-neon-cyan neon-text">
           {mode === "edit" ? "编辑配件" : "新增配件"}
         </h2>
         <button
           type="button"
           onClick={doSave}
-          className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors min-h-[44px]"
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold neon-btn rounded-sm min-h-[44px]"
         >
           <Save size={16} strokeWidth={2.5} />
           保存
@@ -142,13 +139,13 @@ export default function PartForm({ mode, initial }: PartFormProps) {
 
       {/* 验证错误摘要 */}
       {submitAttempted && errorCount > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-sm p-4 flex items-start gap-3">
-          <AlertCircle size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
+        <div className="bg-neon-pink/10 border border-neon-pink/30 rounded-sm p-4 flex items-start gap-3 shadow-[0_0_10px_rgba(255,0,110,0.1)]">
+          <AlertCircle size={20} className="text-neon-pink flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-red-800">
+            <p className="text-sm font-medium text-neon-pink">
               有 {errorCount} 个字段需要填写
             </p>
-            <p className="text-xs text-red-600 mt-1">
+            <p className="text-xs text-steel-400 mt-1">
               请向下滚动查看并填写所有必填项
             </p>
           </div>
@@ -156,10 +153,10 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       )}
 
       {/* 基本信息 */}
-      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-          <Package size={18} className="text-hazard-600" />
-          <h3 className="font-bold text-steel-800">基本信息</h3>
+      <section className="cyber-card rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+          <Package size={18} className="text-neon-cyan" />
+          <h3 className="font-bold text-steel-200">基本信息</h3>
         </div>
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div data-field="name">
@@ -218,7 +215,7 @@ export default function PartForm({ mode, initial }: PartFormProps) {
             </Field>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-steel-700 mb-1.5 block">
+            <label className="text-sm font-medium text-steel-300 mb-1.5 block">
               配件图片
             </label>
             <ImageUpload
@@ -230,10 +227,10 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       </section>
 
       {/* 位置信息 */}
-      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-          <MapPin size={18} className="text-hazard-600" />
-          <h3 className="font-bold text-steel-800">位置信息 <span className="text-red-500 text-sm font-normal">（必填）</span></h3>
+      <section className="cyber-card rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+          <MapPin size={18} className="text-neon-cyan" />
+          <h3 className="font-bold text-steel-200">位置信息 <span className="text-neon-pink text-sm font-normal">（必填）</span></h3>
         </div>
         <div className="p-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div data-field="zone">
@@ -279,7 +276,7 @@ export default function PartForm({ mode, initial }: PartFormProps) {
           {locPath && (
             <div className="col-span-2 sm:col-span-4 mt-1">
               <p className="text-xs text-steel-500 mb-1">位置预览：</p>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-hazard-100 text-hazard-700 border border-hazard-300 rounded-sm font-mono-num text-sm">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/30 rounded-sm font-mono-num text-sm shadow-[0_0_8px_rgba(0,240,255,0.15)]">
                 <MapPin size={14} strokeWidth={2.5} />
                 {locPath}
               </span>
@@ -289,10 +286,10 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       </section>
 
       {/* 库存设置 */}
-      <section className="bg-white border border-steel-200 rounded-sm overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-3 bg-steel-50 border-b border-steel-200">
-          <Boxes size={18} className="text-hazard-600" />
-          <h3 className="font-bold text-steel-800">库存设置</h3>
+      <section className="cyber-card rounded-sm overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-3 bg-steel-800/80 border-b border-neon-cyan/20">
+          <Boxes size={18} className="text-neon-cyan" />
+          <h3 className="font-bold text-steel-200">库存设置</h3>
         </div>
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div data-field="quantity">
@@ -330,14 +327,14 @@ export default function PartForm({ mode, initial }: PartFormProps) {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="px-5 py-2.5 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors min-h-[44px]"
+          className="px-5 py-2.5 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors min-h-[44px]"
         >
           取消
         </button>
         <button
           type="button"
           onClick={doSave}
-          className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors min-h-[44px]"
+          className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold neon-btn rounded-sm min-h-[44px]"
         >
           <Save size={16} strokeWidth={2.5} />
           保存配件

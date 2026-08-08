@@ -40,28 +40,28 @@ export default function UpdateDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-steel-950/80 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-sm shadow-2xl w-full max-w-md animate-scale-in"
+        className="cyber-card rounded-sm shadow-[0_0_30px_rgba(0,240,255,0.15)] w-full max-w-md animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-5 border-b border-steel-100">
+        <div className="flex items-center justify-between p-5 border-b border-neon-cyan/20">
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-9 h-9 bg-green-50 text-green-600 rounded-sm">
+            <div className="flex items-center justify-center w-9 h-9 bg-neon-green/15 text-neon-green border border-neon-green/30 rounded-sm">
               <Download size={18} />
             </div>
             <div>
-              <h3 className="font-bold text-steel-800">发现新版本</h3>
-              <p className="text-xs text-steel-500">
+              <h3 className="font-bold text-steel-200">发现新版本</h3>
+              <p className="text-xs text-steel-400 font-mono-num">
                 {updateInfo.currentVersion} → {updateInfo.latestVersion}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-steel-400 hover:text-steel-600"
+            className="text-steel-500 hover:text-neon-cyan"
           >
             <X size={18} />
           </button>
@@ -70,36 +70,36 @@ export default function UpdateDialog({
         <div className="p-5 space-y-4">
           {updateInfo.releaseNotes && (
             <div>
-              <p className="text-sm font-medium text-steel-700 mb-2">更新内容：</p>
-              <div className="text-sm text-steel-600 bg-steel-50 rounded-sm p-3 max-h-48 overflow-y-auto whitespace-pre-wrap">
+              <p className="text-sm font-medium text-steel-300 mb-2">更新内容：</p>
+              <div className="text-sm text-steel-400 bg-steel-900/50 border border-neon-cyan/10 rounded-sm p-3 max-h-48 overflow-y-auto whitespace-pre-wrap">
                 {updateInfo.releaseNotes}
               </div>
             </div>
           )}
 
           {updateInfo.publishedAt && (
-            <p className="text-xs text-steel-500">
+            <p className="text-xs text-steel-500 font-mono-num">
               发布时间：{formatDate(updateInfo.publishedAt)}
             </p>
           )}
 
-          <div className="bg-blue-50 border border-blue-200 rounded-sm p-3">
-            <p className="text-xs text-blue-700">
+          <div className="bg-neon-cyan/10 border border-neon-cyan/30 rounded-sm p-3">
+            <p className="text-xs text-neon-cyan">
               点击"立即更新"后，将在浏览器中下载 APK 安装包。下载完成后点击安装即可。
             </p>
           </div>
         </div>
 
-        <div className="flex gap-2 p-4 border-t border-steel-100">
+        <div className="flex gap-2 p-4 border-t border-neon-cyan/15">
           <button
             onClick={onClose}
-            className="flex-1 py-2 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors"
+            className="flex-1 py-2 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors"
           >
             稍后再说
           </button>
           <button
             onClick={onDownload}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold bg-green-500 text-white hover:bg-green-600 rounded-sm transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold neon-btn rounded-sm"
           >
             <ExternalLink size={15} />
             立即更新

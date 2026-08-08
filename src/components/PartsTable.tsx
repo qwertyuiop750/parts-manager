@@ -12,18 +12,18 @@ interface PartsTableProps {
 export default function PartsTable({ parts }: PartsTableProps) {
   if (parts.length === 0) {
     return (
-      <div className="bg-white border border-steel-200 rounded-sm py-16 text-center">
-        <p className="text-steel-400 text-sm">未找到匹配的配件</p>
+      <div className="cyber-card rounded-sm py-16 text-center">
+        <p className="text-steel-500 text-sm">未找到匹配的配件</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-steel-200 rounded-sm overflow-hidden">
+    <div className="cyber-card rounded-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full table-stripe text-sm">
           <thead>
-            <tr className="bg-steel-800 text-white text-left">
+            <tr className="bg-steel-800/90 text-steel-200 text-left">
               <th className="px-3 py-3 font-medium w-12 text-center">#</th>
               <th className="px-3 py-3 font-medium">中文名</th>
               <th className="px-3 py-3 font-medium">规格</th>
@@ -40,9 +40,9 @@ export default function PartsTable({ parts }: PartsTableProps) {
               return (
                 <tr
                   key={part.id}
-                  className="border-t border-steel-100 hover:bg-hazard-50/50 transition-colors"
+                  className="border-t border-neon-cyan/10 hover:bg-neon-cyan/5 transition-colors"
                 >
-                  <td className="px-3 py-2.5 text-center text-steel-400 font-mono-num">
+                  <td className="px-3 py-2.5 text-center text-steel-500 font-mono-num">
                     {idx + 1}
                   </td>
                   <td className="px-3 py-2.5">
@@ -51,18 +51,18 @@ export default function PartsTable({ parts }: PartsTableProps) {
                         <img
                           src={part.image}
                           alt={part.name}
-                          className="w-9 h-9 rounded-sm object-cover border border-steel-200 shrink-0"
+                          className="w-9 h-9 rounded-sm object-cover border border-neon-cyan/20 shrink-0"
                         />
                       )}
                       <Link
                         to={`/detail/${part.id}`}
-                        className="font-medium text-steel-800 hover:text-hazard-600"
+                        className="font-medium text-steel-200 hover:text-neon-cyan"
                       >
                         {part.name}
                       </Link>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 font-mono-num text-steel-600">
+                  <td className="px-3 py-2.5 font-mono-num text-steel-400">
                     {part.spec}
                   </td>
                   <td className="px-3 py-2.5">
@@ -75,23 +75,23 @@ export default function PartsTable({ parts }: PartsTableProps) {
                     <span
                       className={cn(
                         "font-bold",
-                        low ? "text-red-600" : "text-steel-800"
+                        low ? "text-neon-pink" : "text-neon-cyan"
                       )}
                     >
                       {part.quantity}
                     </span>
-                    <span className="text-steel-400 text-xs ml-0.5">
+                    <span className="text-steel-500 text-xs ml-0.5">
                       {part.unit}
                     </span>
                   </td>
                   <td className="px-3 py-2.5 text-center">
                     {low ? (
-                      <span className="inline-flex items-center gap-1 text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded-sm">
+                      <span className="inline-flex items-center gap-1 text-xs text-neon-pink bg-neon-pink/10 px-2 py-0.5 rounded-sm border border-neon-pink/20">
                         <AlertTriangle size={12} />
                         预警
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-sm">
+                      <span className="inline-flex items-center gap-1 text-xs text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-sm border border-neon-green/20">
                         <CheckCircle2 size={12} />
                         正常
                       </span>
@@ -101,14 +101,14 @@ export default function PartsTable({ parts }: PartsTableProps) {
                     <div className="flex items-center justify-center gap-1">
                       <Link
                         to={`/detail/${part.id}`}
-                        className="p-1.5 text-steel-500 hover:text-hazard-600 hover:bg-hazard-50 rounded-sm transition-colors"
+                        className="p-1.5 text-steel-500 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-sm transition-colors"
                         title="查看详情"
                       >
                         <Eye size={16} />
                       </Link>
                       <Link
                         to={`/edit/${part.id}`}
-                        className="p-1.5 text-steel-500 hover:text-blue-600 hover:bg-blue-50 rounded-sm transition-colors"
+                        className="p-1.5 text-steel-500 hover:text-neon-purple hover:bg-neon-purple/10 rounded-sm transition-colors"
                         title="编辑"
                       >
                         <Pencil size={16} />

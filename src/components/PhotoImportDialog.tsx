@@ -184,24 +184,24 @@ export default function PhotoImportDialog({
   return (
     <>
       <div
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-steel-900/60 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-steel-950/80 backdrop-blur-sm"
         onClick={() => {
           if (step !== "recognizing") onClose();
         }}
       >
         <div
-          className="bg-white rounded-t-sm sm:rounded-sm shadow-2xl w-full sm:max-w-lg max-h-[92vh] flex flex-col animate-scale-in"
+          className="cyber-card rounded-t-sm sm:rounded-sm shadow-[0_0_30px_rgba(0,240,255,0.15)] w-full sm:max-w-lg max-h-[92vh] flex flex-col animate-scale-in"
           onClick={(e) => e.stopPropagation()}
         >
           {/* 头部 */}
-          <div className="flex items-center justify-between p-4 border-b border-steel-100">
+          <div className="flex items-center justify-between p-4 border-b border-neon-cyan/20">
             <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-9 h-9 bg-hazard-50 text-hazard-600 rounded-sm">
+              <div className="flex items-center justify-center w-9 h-9 bg-neon-purple/15 text-neon-purple border border-neon-purple/30 rounded-sm">
                 <Sparkles size={18} />
               </div>
               <div>
-                <h3 className="font-bold text-steel-800">拍照导入清单</h3>
-                <p className="text-xs text-steel-500">
+                <h3 className="font-bold text-steel-200">拍照导入清单</h3>
+                <p className="text-xs text-steel-400">
                   拍配件表格，自动生成组装清单
                 </p>
               </div>
@@ -209,7 +209,7 @@ export default function PhotoImportDialog({
             {step !== "recognizing" && (
               <button
                 onClick={onClose}
-                className="text-steel-400 hover:text-steel-600 p-1"
+                className="text-steel-500 hover:text-neon-cyan p-1"
               >
                 <X size={18} />
               </button>
@@ -217,7 +217,7 @@ export default function PhotoImportDialog({
           </div>
 
           {/* 步骤条 */}
-          <div className="flex items-center px-4 py-2 bg-steel-50 border-b border-steel-100 text-xs">
+          <div className="flex items-center px-4 py-2 bg-steel-800/50 border-b border-neon-cyan/15 text-xs">
             <StepDot active={step === "capture"} done={step !== "capture"} n={1} label="拍照" />
             <StepLine done={step === "review" || step === "done"} />
             <StepDot
@@ -239,38 +239,38 @@ export default function PhotoImportDialog({
                     <img
                       src={image}
                       alt="待识别"
-                      className="w-full max-h-64 object-contain rounded-sm border border-steel-200"
+                      className="w-full max-h-64 object-contain rounded-sm border border-neon-cyan/20"
                     />
                   </div>
                 )}
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={handleCapture}
-                    className="flex flex-col items-center justify-center gap-2 py-6 bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 py-6 neon-btn rounded-sm"
                   >
                     <Camera size={28} strokeWidth={2.5} />
                     <span className="text-sm font-bold">拍照</span>
                   </button>
                   <button
                     onClick={() => fileRef.current?.click()}
-                    className="flex flex-col items-center justify-center gap-2 py-6 bg-steel-100 text-steel-700 hover:bg-steel-200 rounded-sm transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 py-6 bg-steel-800 text-steel-300 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors"
                   >
                     <ImagePlus size={28} strokeWidth={2.5} />
                     <span className="text-sm font-bold">相册选择</span>
                   </button>
                 </div>
-                <p className="mt-3 text-xs text-steel-400 text-center">
+                <p className="mt-3 text-xs text-steel-500 text-center">
                   拍一张打印好的配件表格，AI 自动提取名称、规格、数量
                 </p>
                 {error && (
-                  <div className="mt-3 flex items-start gap-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-sm">
+                  <div className="mt-3 flex items-start gap-2 text-xs text-neon-pink bg-neon-pink/10 border border-neon-pink/20 px-3 py-2 rounded-sm">
                     <AlertCircle size={14} className="shrink-0 mt-0.5" />
                     <span>{error}</span>
                   </div>
                 )}
                 <button
                   onClick={() => setSettingsOpen(true)}
-                  className="mt-3 w-full text-xs text-steel-500 hover:text-hazard-600 underline underline-offset-2"
+                  className="mt-3 w-full text-xs text-steel-500 hover:text-neon-cyan underline underline-offset-2"
                 >
                   识别接口设置
                 </button>
@@ -279,11 +279,11 @@ export default function PhotoImportDialog({
 
             {step === "recognizing" && (
               <div className="p-10 flex flex-col items-center justify-center text-center">
-                <Loader2 size={40} className="text-hazard-500 animate-spin mb-3" />
-                <p className="text-sm font-medium text-steel-700">
+                <Loader2 size={40} className="text-neon-cyan animate-spin mb-3" />
+                <p className="text-sm font-medium text-steel-200">
                   正在识别表格内容…
                 </p>
-                <p className="text-xs text-steel-400 mt-1">
+                <p className="text-xs text-steel-500 mt-1">
                   调用视觉模型解析图片，请稍候
                 </p>
               </div>
@@ -316,8 +316,8 @@ export default function PhotoImportDialog({
                     <span
                       className={`font-mono-num ${
                         matchedCount === rows.length
-                          ? "text-green-600"
-                          : "text-hazard-600"
+                          ? "text-neon-green"
+                          : "text-neon-cyan"
                       }`}
                     >
                       已匹配 {matchedCount}/{rows.length}
@@ -331,21 +331,21 @@ export default function PhotoImportDialog({
                     return (
                       <div
                         key={idx}
-                        className="bg-steel-50 border border-steel-200 rounded-sm p-3"
+                        className="bg-steel-900/50 border border-neon-cyan/15 rounded-sm p-3"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium text-steel-800 text-sm truncate">
+                            <p className="font-medium text-steel-200 text-sm truncate">
                               {row.item.name}
                             </p>
                             {row.item.spec && (
-                              <p className="text-xs text-steel-500 font-mono-num mt-0.5">
+                              <p className="text-xs text-steel-400 font-mono-num mt-0.5">
                                 规格：{row.item.spec}
                               </p>
                             )}
                           </div>
                           <div className="flex items-center gap-1 shrink-0">
-                            <span className="text-xs text-steel-400">×</span>
+                            <span className="text-xs text-steel-500">×</span>
                             <input
                               type="number"
                               min={1}
@@ -359,7 +359,7 @@ export default function PhotoImportDialog({
                                   },
                                 })
                               }
-                              className="w-14 px-2 py-1 text-sm text-center bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400 font-mono-num"
+                              className="w-14 px-2 py-1 text-sm text-center cyber-input rounded-sm font-mono-num"
                             />
                           </div>
                         </div>
@@ -383,7 +383,7 @@ export default function PhotoImportDialog({
                                   : "none",
                               });
                             }}
-                            className="flex-1 min-w-0 px-2 py-1.5 text-xs bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                            className="flex-1 min-w-0 px-2 py-1.5 text-xs cyber-input rounded-sm"
                           >
                             <option value="">— 未匹配 —</option>
                             {parts.map((p) => (
@@ -396,7 +396,7 @@ export default function PhotoImportDialog({
                           </select>
                         </div>
                         {matchedPart && (
-                          <p className="mt-1.5 text-[11px] text-hazard-700 font-mono-num">
+                          <p className="mt-1.5 text-[11px] text-neon-cyan font-mono-num">
                             位置：{locationPath(matchedPart) || "未设置"}
                           </p>
                         )}
@@ -406,7 +406,7 @@ export default function PhotoImportDialog({
                 </div>
 
                 {error && (
-                  <div className="flex items-start gap-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-sm">
+                  <div className="flex items-start gap-2 text-xs text-neon-pink bg-neon-pink/10 border border-neon-pink/20 px-3 py-2 rounded-sm">
                     <AlertCircle size={14} className="shrink-0 mt-0.5" />
                     <span>{error}</span>
                   </div>
@@ -416,8 +416,8 @@ export default function PhotoImportDialog({
 
             {step === "done" && (
               <div className="p-10 flex flex-col items-center justify-center text-center">
-                <CheckCircle2 size={48} className="text-green-500 mb-3" />
-                <p className="text-sm font-bold text-steel-800">清单已生成</p>
+                <CheckCircle2 size={48} className="text-neon-green mb-3" />
+                <p className="text-sm font-bold text-steel-200">清单已生成</p>
                 <p className="text-xs text-steel-500 mt-1">
                   已匹配 {matchedCount} 项配件
                 </p>
@@ -427,10 +427,10 @@ export default function PhotoImportDialog({
 
           {/* 底部操作 */}
           {step === "review" && (
-            <div className="flex gap-2 p-4 border-t border-steel-100">
+            <div className="flex gap-2 p-4 border-t border-neon-cyan/15">
               <button
                 onClick={reset}
-                className="flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-steel-600 bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors"
+                className="flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-steel-400 bg-steel-800 hover:bg-steel-700 border border-steel-700 rounded-sm transition-colors"
               >
                 <RotateCcw size={15} />
                 重拍
@@ -438,7 +438,7 @@ export default function PhotoImportDialog({
               <button
                 onClick={handleCreate}
                 disabled={matchedCount === 0}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 disabled:bg-steel-200 disabled:text-steel-400 rounded-sm transition-colors"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-sm font-bold neon-btn rounded-sm disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 生成清单
                 <ArrowRight size={15} strokeWidth={2.5} />
