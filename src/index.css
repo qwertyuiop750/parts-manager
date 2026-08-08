@@ -14,9 +14,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* 安全区域变量 */
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* 安全区域变量：env() 在某些 Android WebView 中可能为 0，用 max() 兜底 */
+  --safe-top: max(env(safe-area-inset-top, 0px), 24px);
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 }

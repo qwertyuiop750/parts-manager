@@ -48,8 +48,8 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
     <div className="min-h-screen flex flex-col bg-steel-100">
       {/* 顶部导航：留出安全区域，移动端更紧凑 */}
       <header
-        className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg"
-        style={{ paddingTop: 'max(var(--safe-top), 8px)' }}
+        className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg pt-6 sm:pt-0"
+        style={{ paddingTop: 'max(var(--safe-top), 24px)' }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14">

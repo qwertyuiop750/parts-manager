@@ -10,6 +10,8 @@ import './index.css'
 async function setupNative() {
   if (!Capacitor.isNativePlatform()) return
   try {
+    // 关键：不让 WebView 延伸到状态栏下方
+    await StatusBar.setOverlaysWebView({ overlay: false })
     await StatusBar.setStyle({ style: Style.Dark })
     await StatusBar.setBackgroundColor({ color: '#1e293b' })
   } catch (e) {
@@ -26,10 +28,14 @@ async function setupNative() {
   })
 }
 
-setupNative()
+// 等待原生配置完成后再渲染
+async function init() {
+  await setupNative()
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+init()
