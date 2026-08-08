@@ -23,6 +23,23 @@
 
 * {
   box-sizing: border-box;
+  /* 移除移动端 300ms 点击延迟 */
+  touch-action: manipulation;
+}
+
+/* 触摸优化：确保所有可点击元素有足够大的触摸区域 */
+button, a, [role="button"], input[type="submit"], input[type="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  /* 触摸反馈 */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  touch-action: manipulation;
+}
+
+/* 输入框触摸优化 */
+input, textarea, select {
+  font-size: 16px; /* 防止 iOS 自动缩放 */
+  touch-action: manipulation;
 }
 
 html,
