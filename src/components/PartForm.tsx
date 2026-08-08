@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Save, ArrowLeft, MapPin, Package, Boxes, AlertCircle } from "lucide-react";
 import type { Part, PartFormData } from "@/types";
@@ -36,79 +36,73 @@ export default function PartForm({ mode, initial }: PartFormProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
-  const formValueRef = useRef(form);
-
-  // 同步 form 到 ref，确保验证时总是读取最新值
+  const containerRef = useRef<HTMLDivElement>(null);
+  // 用 ref 保存最新表单数据，避免 Android WebView 中闭包过期
+  const latestForm = useRef(form);
   useEffect(() => {
-    formValueRef.current = form;
-  }, [form]);
+    latestForm.current = form;
+  });
 
   // 验证失败后滚动到第一个错误字段
   useEffect(() => {
     if (submitAttempted && Object.keys(errors).length > 0) {
       const firstErrorKey = Object.keys(errors)[0];
-      const errorElement = formRef.current?.querySelector(`[data-field="${firstErrorKey}"]`);
+      const errorElement = containerRef.current?.querySelector(`[data-field="${firstErrorKey}"]`);
       if (errorElement) {
         errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
   }, [errors, submitAttempted]);
 
-  const set = useCallback(<K extends keyof PartFormData>(key: K, value: PartFormData[K]) => {
+  const set = <K extends keyof PartFormData>(key: K, value: PartFormData[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-    // 清除该字段的错误
     setErrors((e) => {
-      if (e[key]) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { [key]: _unused, ...rest } = e;
-        return rest;
-      }
-      return e;
+      if (!e[key]) return e;
+      const next = { ...e };
+      delete next[key];
+      return next;
     });
-  }, []);
+  };
 
-  const validate = useCallback((data: PartFormData): Record<string, string> => {
-    const errs: Record<string, string> = {};
-    if (!data.name.trim()) errs.name = "请输入中文名";
-    if (!data.spec.trim()) errs.spec = "请输入规格";
-    if (!data.zone.trim()) errs.zone = "请输入库区";
-    if (!data.shelf.trim()) errs.shelf = "请输入货架";
-    if (!data.layer.trim()) errs.layer = "请输入层";
-    if (!data.bin.trim()) errs.bin = "请输入位";
-    if (data.quantity < 0) errs.quantity = "数量不能为负";
-    if (data.safetyStock < 0) errs.safetyStock = "不能为负";
-    return errs;
-  }, []);
-
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
+  const doSave = () => {
     setSubmitAttempted(true);
-    // 使用 ref 获取最新的表单数据，避免闭包陷阱
-    const currentForm = formValueRef.current;
-    const errs = validate(currentForm);
+    // 始终从 ref 读取最新数据
+    const current = latestForm.current;
+    const errs: Record<string, string> = {};
+    if (!current.name.trim()) errs.name = "请输入中文名";
+    if (!current.spec.trim()) errs.spec = "请输入规格";
+    if (!current.zone.trim()) errs.zone = "请输入库区";
+    if (!current.shelf.trim()) errs.shelf = "请输入货架";
+    if (!current.layer.trim()) errs.layer = "请输入层";
+    if (!current.bin.trim()) errs.bin = "请输入位";
+    if (current.quantity < 0) errs.quantity = "数量不能为负";
+    if (current.safetyStock < 0) errs.safetyStock = "不能为负";
+
     setErrors(errs);
+
     if (Object.keys(errs).length > 0) {
       const firstError = Object.keys(errs)[0];
       setTimeout(() => {
-        const element = document.querySelector(`[data-field="${firstError}"]`);
+        const element = containerRef.current?.querySelector(`[data-field="${firstError}"]`);
         if (element) {
           element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
-      }, 50);
+      }, 100);
       return;
     }
+
     const data: PartFormData = {
-      ...currentForm,
-      name: currentForm.name.trim(),
-      spec: currentForm.spec.trim(),
-      category: currentForm.category.trim(),
-      zone: currentForm.zone.trim(),
-      shelf: currentForm.shelf.trim(),
-      layer: currentForm.layer.trim(),
-      bin: currentForm.bin.trim(),
-      remark: currentForm.remark.trim(),
+      ...current,
+      name: current.name.trim(),
+      spec: current.spec.trim(),
+      category: current.category.trim(),
+      zone: current.zone.trim(),
+      shelf: current.shelf.trim(),
+      layer: current.layer.trim(),
+      bin: current.bin.trim(),
+      remark: current.remark.trim(),
     };
+
     if (mode === "edit" && initial) {
       updatePart(initial.id, data);
       navigate(`/detail/${initial.id}`);
@@ -116,13 +110,13 @@ export default function PartForm({ mode, initial }: PartFormProps) {
       const part = addPart(data);
       navigate(`/detail/${part.id}`);
     }
-  }, [validate, mode, initial, addPart, updatePart, navigate]);
+  };
 
   const locPath = locationPath(form);
   const errorCount = Object.keys(errors).length;
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 max-w-3xl animate-fade-up">
+    <div ref={containerRef} className="space-y-6 max-w-3xl animate-fade-up">
       {/* 顶部操作栏 */}
       <div className="flex items-center justify-between gap-3">
         <button
@@ -137,7 +131,8 @@ export default function PartForm({ mode, initial }: PartFormProps) {
           {mode === "edit" ? "编辑配件" : "新增配件"}
         </h2>
         <button
-          type="submit"
+          type="button"
+          onClick={doSave}
           className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors min-h-[44px]"
         >
           <Save size={16} strokeWidth={2.5} />
@@ -174,7 +169,6 @@ export default function PartForm({ mode, initial }: PartFormProps) {
                 value={form.name}
                 onChange={(e) => set("name", e.target.value)}
                 placeholder="如：六角螺栓"
-                autoFocus
               />
             </Field>
           </div>
@@ -341,13 +335,14 @@ export default function PartForm({ mode, initial }: PartFormProps) {
           取消
         </button>
         <button
-          type="submit"
+          type="button"
+          onClick={doSave}
           className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold bg-hazard-400 text-steel-900 hover:bg-hazard-300 rounded-sm transition-colors min-h-[44px]"
         >
           <Save size={16} strokeWidth={2.5} />
           保存配件
         </button>
       </div>
-    </form>
+    </div>
   );
 }
