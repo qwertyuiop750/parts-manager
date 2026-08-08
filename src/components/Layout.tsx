@@ -11,7 +11,6 @@ import {
   Cloud,
   CloudOff,
   Loader2,
-  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ApiSettingsDialog from "@/components/ApiSettingsDialog";

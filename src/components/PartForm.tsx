@@ -60,7 +60,8 @@ export default function PartForm({ mode, initial }: PartFormProps) {
     // 清除该字段的错误
     setErrors((e) => {
       if (e[key]) {
-        const { [key]: _, ...rest } = e;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [key]: _unused, ...rest } = e;
         return rest;
       }
       return e;

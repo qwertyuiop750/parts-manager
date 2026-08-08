@@ -14,7 +14,6 @@ import { usePartsStore } from "@/store/usePartsStore";
 import { locationPath, isLowStock, formatDateTime } from "@/utils/format";
 import Layout from "@/components/Layout";
 import { cn } from "@/lib/utils";
-import type { PickTask } from "@/types";
 
 export default function PickTaskPage() {
   const { id } = useParams<{ id: string }>();

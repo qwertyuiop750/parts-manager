@@ -4,14 +4,13 @@ import { usePartsStore } from "@/store/usePartsStore";
 import { isLowStock, isToday } from "@/utils/format";
 import { exportData, parseImportFile } from "@/utils/io";
 import {
-  isSyncConfigured,
   getSyncConfig,
   pullRemoteData,
   pushRemoteData,
   buildExportData,
   mergeRemoteToLocal,
 } from "@/utils/sync";
-import { checkForUpdate, openDownloadUrl, getCurrentVersion, type UpdateInfo } from "@/utils/updater";
+import { checkForUpdate, openDownloadUrl, type UpdateInfo } from "@/utils/updater";
 import Layout from "@/components/Layout";
 import type { SyncStatus } from "@/components/Layout";
 import StatCard from "@/components/StatCard";

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Search, Plus, Trash2, X, Package } from "lucide-react";
+import { Search, Plus, Trash2, Package } from "lucide-react";
 import type { AssemblyList, AssemblyItem } from "@/types";
 import { usePartsStore } from "@/store/usePartsStore";
 import { locationPath } from "@/utils/format";
