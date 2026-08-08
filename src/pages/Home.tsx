@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { Search, Package, AlertTriangle, Map, PackageCheck, Filter, X } from "lucide-react";
 import { usePartsStore } from "@/store/usePartsStore";
 import { isLowStock, isToday } from "@/utils/format";
@@ -11,10 +11,12 @@ import {
   buildExportData,
   mergeRemoteToLocal,
 } from "@/utils/sync";
+import { checkForUpdate, openDownloadUrl, getCurrentVersion, type UpdateInfo } from "@/utils/updater";
 import Layout from "@/components/Layout";
 import type { SyncStatus } from "@/components/Layout";
 import StatCard from "@/components/StatCard";
 import PartsTable from "@/components/PartsTable";
+import UpdateDialog from "@/components/UpdateDialog";
 import type { SortKey } from "@/types";
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
@@ -41,6 +43,32 @@ export default function Home() {
   const [lastSyncTime, setLastSyncTime] = useState(() => {
     try { return localStorage.getItem("parts_manager_last_sync") || ""; } catch { return ""; }
   });
+
+  // 自动更新相关状态
+  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+
+  // 应用启动时检查更新
+  useEffect(() => {
+    const doCheck = async () => {
+      setCheckingUpdate(true);
+      try {
+        const info = await checkForUpdate();
+        if (info.hasUpdate) {
+          setUpdateInfo(info);
+          setShowUpdateDialog(true);
+        }
+      } catch (err) {
+        console.error("检查更新失败:", err);
+      } finally {
+        setCheckingUpdate(false);
+      }
+    };
+    // 延迟 2 秒检查，避免影响启动体验
+    const timer = setTimeout(doCheck, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 统计
   const stats = useMemo(() => {
@@ -118,6 +146,32 @@ export default function Home() {
   };
 
   const hasFilter = zoneFilter || categoryFilter;
+
+  // 手动检查更新
+  const handleCheckUpdate = async () => {
+    setCheckingUpdate(true);
+    try {
+      const info = await checkForUpdate(true);
+      setUpdateInfo(info);
+      if (info.hasUpdate) {
+        setShowUpdateDialog(true);
+      } else {
+        alert(`当前已是最新版本 v${info.currentVersion}`);
+      }
+    } catch (err) {
+      alert("检查更新失败：" + (err as Error).message);
+    } finally {
+      setCheckingUpdate(false);
+    }
+  };
+
+  // 下载更新
+  const handleDownloadUpdate = async () => {
+    if (updateInfo?.downloadUrl) {
+      await openDownloadUrl(updateInfo.downloadUrl);
+      setShowUpdateDialog(false);
+    }
+  };
 
   // 云端同步 - 推送
   const handleSyncPush = async () => {
@@ -302,6 +356,15 @@ export default function Home() {
                   ))}
                 </select>
               </div>
+              <div className="pt-2 border-t border-steel-200">
+                <button
+                  onClick={handleCheckUpdate}
+                  disabled={checkingUpdate}
+                  className="w-full px-2.5 py-1.5 text-sm bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors disabled:opacity-50"
+                >
+                  {checkingUpdate ? "检查中..." : "检查更新"}
+                </button>
+              </div>
             </div>
           </div>
         </aside>
@@ -315,22 +378,40 @@ export default function Home() {
                 <span className="text-steel-400"> / {parts.length}</span>
               )}
             </p>
-            {/* 移动端排序 */}
-            <select
-              className="lg:hidden px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
-              value={sortKey}
-              onChange={(e) => setSortKey(e.target.value as SortKey)}
-            >
-              {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
+            <div className="flex gap-2">
+              {/* 移动端检查更新按钮 */}
+              <button
+                onClick={handleCheckUpdate}
+                disabled={checkingUpdate}
+                className="lg:hidden px-2.5 py-1.5 text-sm bg-steel-100 hover:bg-steel-200 rounded-sm transition-colors disabled:opacity-50"
+              >
+                {checkingUpdate ? "检查中..." : "检查更新"}
+              </button>
+              {/* 移动端排序 */}
+              <select
+                className="lg:hidden px-2.5 py-1.5 text-sm bg-white border border-steel-300 rounded-sm focus:outline-none focus:border-hazard-400"
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as SortKey)}
+              >
+                {SORT_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <PartsTable parts={filtered} />
         </div>
       </div>
+
+      {/* 更新对话框 */}
+      <UpdateDialog
+        open={showUpdateDialog}
+        updateInfo={updateInfo}
+        onClose={() => setShowUpdateDialog(false)}
+        onDownload={handleDownloadUpdate}
+      />
     </Layout>
   );
 }
