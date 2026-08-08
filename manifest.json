@@ -1,0 +1,51 @@
+{
+  "@platforms": ["android", "iPhone", "iPad"],
+  "id": "com.warehouse.partsmanager",
+  "name": "配件仓位管家",
+  "version": {
+    "name": "1.1",
+    "code": "2"
+  },
+  "description": "配件库存管理与位置追踪工具",
+  "launch_path": "index.html",
+  "developer": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "permissions": {
+    "Camera": {
+      "description": "用于拍摄配件照片"
+    }
+  },
+  "plus": {
+    "splashscreen": {
+      "autoclose": true,
+      "waiting": true,
+      "delay": 500
+    },
+    "statusbar": {
+      "immersed": "supportedDevice",
+      "style": "dark",
+      "background": "#0a0a1a"
+    },
+    "distribute": {
+      "google": {
+        "packagename": "com.warehouse.partsmanager",
+        "keystore": "",
+        "password": "",
+        "aliasname": "",
+        "permissions": [
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.INTERNET\"/>"
+        ]
+      },
+      "apple": {},
+      "plugins": {
+        "camera": {}
+      }
+    }
+  }
+}

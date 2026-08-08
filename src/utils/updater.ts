@@ -2,7 +2,6 @@
  * GitHub Releases 自动更新模块
  * 检查最新版本 → 对比当前版本 → 提供下载链接
  */
-import { Capacitor } from "@capacitor/core";
 
 const OWNER = "qwertyuiop750";
 const REPO = "parts-manager";
@@ -121,11 +120,12 @@ export async function checkForUpdate(forceRefresh = false): Promise<UpdateInfo> 
   }
 }
 
-/** 打开下载链接（原生平台用系统浏览器，Web 端直接跳转） */
+/** 打开下载链接（HBuilderX 原生用 plus.runtime.openURL，Web 端直接跳转） */
 export async function openDownloadUrl(url: string): Promise<void> {
-  if (Capacitor.isNativePlatform()) {
-    const { Browser } = await import("@capacitor/browser");
-    await Browser.open({ url });
+  // @ts-ignore
+  if (typeof plus !== 'undefined') {
+    // @ts-ignore
+    plus.runtime.openURL(url);
   } else {
     window.open(url, "_blank");
   }

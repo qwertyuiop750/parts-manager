@@ -1,41 +1,56 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Capacitor } from '@capacitor/core'
-import { StatusBar, Style } from '@capacitor/status-bar'
-import { App as CapacitorApp } from '@capacitor/app'
 import App from './App'
 import './index.css'
 
-// 原生平台：配置状态栏 + Android 返回键
-async function setupNative() {
-  if (!Capacitor.isNativePlatform()) return
+// HBuilderX 5+ API 初始化
+function setupPlus() {
+  // @ts-ignore - plus is defined in HBuilderX runtime
+  if (typeof plus === 'undefined') return
+
+  // @ts-ignore
+  const p = plus
+
+  // 状态栏配置
   try {
-    // 关键：不让 WebView 延伸到状态栏下方
-    await StatusBar.setOverlaysWebView({ overlay: false })
-    await StatusBar.setStyle({ style: Style.Dark })
-    await StatusBar.setBackgroundColor({ color: '#1e293b' })
+    p.navigator.setStatusBarStyle('dark')
+    p.navigator.setStatusBarBackground('#0a0a1a')
   } catch (e) {
     console.warn('StatusBar setup failed:', e)
   }
 
-  // Android 物理返回键：优先 history.back，主页则退出
-  CapacitorApp.addListener('backButton', ({ canGoBack }) => {
-    if (canGoBack) {
+  // Android 物理返回键
+  p.key.addEventListener('backbutton', () => {
+    if (window.history.length > 1) {
       window.history.back()
     } else {
-      CapacitorApp.exitApp()
+      // 在首页，提示退出
+      p.runtime.quit()
     }
   })
 }
 
-// 等待原生配置完成后再渲染
-async function init() {
-  await setupNative()
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  )
+// 等待 plus ready 后渲染
+function init() {
+  // @ts-ignore
+  if (typeof plus !== 'undefined') {
+    // @ts-ignore
+    plus.ready(() => {
+      setupPlus()
+      createRoot(document.getElementById('root')!).render(
+        <StrictMode>
+          <App />
+        </StrictMode>,
+      )
+    })
+  } else {
+    // Web 环境直接渲染
+    createRoot(document.getElementById('root')!).render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    )
+  }
 }
 
 init()

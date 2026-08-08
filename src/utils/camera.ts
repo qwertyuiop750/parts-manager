@@ -1,25 +1,76 @@
-import { Capacitor } from "@capacitor/core";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-
 /**
  * 调用相机/相册获取图片，返回压缩后的 data URL。
- * - 原生（Android）：使用 Capacitor Camera，弹出"拍照/相册"选择
+ * - HBuilderX 5+ 原生：使用 plus.gallery.pick / plus.camera.getCamera()
  * - Web：返回 null，由组件用 <input type=file> 处理
  */
 export async function captureImage(): Promise<string | null> {
-  if (!Capacitor.isNativePlatform()) return null;
-  const photo = await Camera.getPhoto({
-    quality: 85,
-    resultType: CameraResultType.DataUrl,
-    source: CameraSource.Prompt,
-    promptLabelPhoto: "从相册选择",
-    promptLabelPicture: "拍照",
-    promptLabelCancel: "取消",
-    correctOrientation: true,
+  // @ts-ignore
+  if (typeof plus === 'undefined') return null;
+
+  // @ts-ignore
+  const p = plus;
+
+  return new Promise<string | null>((resolve) => {
+    // 弹出选择：拍照 or 相册
+    p.nativeUI.actionSheet(
+      { title: '选择图片来源', cancel: '取消', buttons: [{ title: '拍照' }, { title: '从相册选择' }] },
+      (e: { index: number }) => {
+        if (e.index === 1) {
+          // 拍照
+          const cmr = p.camera.getCamera();
+          cmr.captureImage(
+            (path: string) => {
+              // 读取文件为 base64
+              p.io.resolveLocalFileSystemURL(
+                path,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (entry: any) => {
+                  entry.file((f: File) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      const dataUrl = reader.result as string;
+                      resolve(compressDataUrl(dataUrl, 1280, 0.85));
+                    };
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(f);
+                  });
+                },
+                () => resolve(null)
+              );
+            },
+            () => resolve(null),
+            { filename: '_doc/camera/', optimize: true }
+          );
+        } else if (e.index === 2) {
+          // 相册
+          p.gallery.pick(
+            (path: string) => {
+              p.io.resolveLocalFileSystemURL(
+                path,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (entry: any) => {
+                  entry.file((f: File) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      const dataUrl = reader.result as string;
+                      resolve(compressDataUrl(dataUrl, 1280, 0.85));
+                    };
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(f);
+                  });
+                },
+                () => resolve(null)
+              );
+            },
+            () => resolve(null),
+            { filter: 'image', multiple: false }
+          );
+        } else {
+          resolve(null);
+        }
+      }
+    );
   });
-  if (!photo.dataUrl) return null;
-  // 表格识别需要较高分辨率，统一压缩到 1280px
-  return compressDataUrl(photo.dataUrl, 1280, 0.85);
 }
 
 /** 将任意 data URL 通过 canvas 压缩到指定尺寸 */
