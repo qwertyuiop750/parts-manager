@@ -12,8 +12,6 @@ async function setupNative() {
   try {
     await StatusBar.setStyle({ style: Style.Dark })
     await StatusBar.setBackgroundColor({ color: '#1e293b' })
-    // 不让状态栏覆盖 WebView 内容
-    await StatusBar.setOverlaysWebView({ overlay: false })
   } catch (e) {
     console.warn('StatusBar setup failed:', e)
   }

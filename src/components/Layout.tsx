@@ -46,18 +46,21 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
 
   return (
     <div className="min-h-screen flex flex-col bg-steel-100">
-      {/* 顶部导航 */}
-      <header className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg" style={{ paddingTop: 'var(--safe-top)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-14 sm:h-16">
-            <div className="flex items-center gap-6">
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="flex items-center justify-center w-10 h-10 bg-hazard-400 text-steel-900 rounded-sm group-hover:bg-hazard-300 transition-colors">
-                  <Boxes size={24} strokeWidth={2.5} />
+      {/* 顶部导航：留出安全区域，移动端更紧凑 */}
+      <header
+        className="sticky top-0 z-30 bg-steel-800 text-white shadow-lg"
+        style={{ paddingTop: 'max(var(--safe-top), 8px)' }}
+      >
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex items-center justify-between h-12 sm:h-14">
+            <div className="flex items-center gap-3 sm:gap-6">
+              <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
+                <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-hazard-400 text-steel-900 rounded-sm group-hover:bg-hazard-300 transition-colors">
+                  <Boxes size={22} strokeWidth={2.5} />
                 </div>
                 <div className="leading-tight hidden sm:block">
-                  <h1 className="font-bold text-lg tracking-wide">配件仓位管家</h1>
-                  <p className="text-[11px] text-steel-400 font-mono-num">
+                  <h1 className="font-bold text-base sm:text-lg tracking-wide">配件仓位管家</h1>
+                  <p className="text-[10px] text-steel-400 font-mono-num">
                     PARTS · LOCATION · MANAGER
                   </p>
                 </div>
@@ -73,7 +76,7 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
                       key={item.to}
                       to={item.to}
                       className={cn(
-                        "flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-sm transition-colors",
+                        "flex items-center gap-1.5 px-2 sm:px-3 py-2 text-sm font-medium rounded-sm transition-colors",
                         active
                           ? "bg-steel-700 text-hazard-300"
                           : "text-steel-300 hover:text-white hover:bg-steel-700/60"
@@ -175,12 +178,18 @@ export default function Layout({ children, onExport, onImport, onSyncPush, onSyn
       </header>
 
       {/* 主内容 */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+      <main
+        className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6"
+        style={{ paddingBottom: 'var(--safe-bottom)' }}
+      >
         {children}
       </main>
 
       {/* 底栏 */}
-      <footer className="bg-steel-800 text-steel-400 text-xs py-3" style={{ paddingBottom: 'var(--safe-bottom)' }}>
+      <footer
+        className="bg-steel-800 text-steel-400 text-xs py-2 sm:py-3"
+        style={{ paddingBottom: 'max(var(--safe-bottom), 12px)' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <span>数据本地存储 · 支持云端同步</span>
           <span className="font-mono-num">v1.1</span>
